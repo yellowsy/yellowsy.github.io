@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Linex命令 | 月亮十六便士</title>
+  <meta name="description" content="1. 常用命令重启网卡123systemctl restart network  service network restart  用户切换12su hsy（普通用户）su - (切换到root用户)  关机12345halt  shutdown -h now (立即关机)   shutdown -h +5(五分钟以后关机)shutdown -c (取消关机)init 0 (关机) ；init 6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linex命令">
+<meta property="og:url" content="https://yellowsy.github.io/2022/09/13/Linex%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="紫薯与你">
+<meta property="og:description" content="1. 常用命令重启网卡123systemctl restart network  service network restart  用户切换12su hsy（普通用户）su - (切换到root用户)  关机12345halt  shutdown -h now (立即关机)   shutdown -h +5(五分钟以后关机)shutdown -c (取消关机)init 0 (关机) ；init 6">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-13T12:46:03.000Z">
+<meta property="article:modified_time" content="2022-09-13T13:48:00.792Z">
+<meta property="article:author" content="Huang_SY">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://yellowsy.github.io/2022/09/13/Linex%E5%91%BD%E4%BB%A4/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="紫薯与你" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/cofess" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">星星失眠啦</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">梅花何止落满一座南山</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Wuhan, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://yellowsy.github.io" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+
+    
+      
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/13/Linex%E5%91%BD%E4%BB%A4/" class="title">Linex命令</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-13T12:46:03.000Z" itemprop="datePublished">2022-09-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" class="title">适合发朋友圈的文案</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-12T12:19:21.000Z" itemprop="datePublished">2022-09-12</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Linex命令" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Linex命令
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/09/13/Linex%E5%91%BD%E4%BB%A4/" class="article-date">
+	  <time datetime="2022-09-13T12:46:03.000Z" itemprop="datePublished">2022-09-13</time>
+	</a>
+</span>
+        
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/13/Linex%E5%91%BD%E4%BB%A4/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h3 id="1-常用命令"><a href="#1-常用命令" class="headerlink" title="1. 常用命令"></a>1. 常用命令</h3><h5 id="重启网卡"><a href="#重启网卡" class="headerlink" title="重启网卡"></a>重启网卡</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart network  </span><br><span class="line">service network restart</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="用户切换"><a href="#用户切换" class="headerlink" title="用户切换"></a>用户切换</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">su hsy（普通用户）</span><br><span class="line">su - (切换到root用户)</span><br></pre></td></tr></table></figure>
+
+<h5 id="关机"><a href="#关机" class="headerlink" title="关机"></a>关机</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">halt  </span><br><span class="line">shutdown -h now (立即关机)   </span><br><span class="line">shutdown -h +5(五分钟以后关机)</span><br><span class="line">shutdown -c (取消关机)</span><br><span class="line">init 0 (关机) ；init 6 (重启)</span><br></pre></td></tr></table></figure>
+
+<h5 id="使用-“-；”一次输入多个命令"><a href="#使用-“-；”一次输入多个命令" class="headerlink" title="使用 “ ；”一次输入多个命令"></a>使用 “ ；”一次输入多个命令</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command1 ;  command2 ; command3</span><br></pre></td></tr></table></figure>
+
+<h5 id="常用小技巧"><a href="#常用小技巧" class="headerlink" title="常用小技巧"></a>常用小技巧</h5><p>​		<em>显示或操作命令历史列表</em></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">history</span><br></pre></td></tr></table></figure>
+
+<p>​	    <em>补全路径</em></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">文件或目录的首几个字母+Tab</span><br></pre></td></tr></table></figure>
+
+<p>​	    <em>显示上一条路径</em></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Esc+.  (点)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-操作文件和目录"><a href="#2-操作文件和目录" class="headerlink" title="2. 操作文件和目录"></a>2. <strong>操作文件和目录</strong></h3><h5 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rm file 删除文件（可以不为空删除）</span><br><span class="line">rm -f flie 强制删除</span><br><span class="line">rm -r 目录名   递归删除目录（该目录下可以有其他文件，被一起删除）</span><br><span class="line">rmdir 删除空目录 </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h5 id="创建目录"><a href="#创建目录" class="headerlink" title="创建目录"></a>创建目录</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir--创建目录   </span><br><span class="line">mkdir dir1创建一个目录</span><br><span class="line">mkdir dir1 dir2 dir3 一次创建多个目录</span><br></pre></td></tr></table></figure>
+<h5 id="复制文件和目录"><a href="#复制文件和目录" class="headerlink" title="复制文件和目录"></a>复制文件和目录</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp item1 item2 将文件或目录item1复制到item2</span><br><span class="line">cp -r  递归复制目录</span><br><span class="line">cp -p 保留源文件的属性不变</span><br></pre></td></tr></table></figure>
+<h5 id="移动和重命名文件"><a href="#移动和重命名文件" class="headerlink" title="移动和重命名文件"></a>移动和重命名文件</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv item1 item2 将文件或目录item1移动或重命名为item2</span><br></pre></td></tr></table></figure>
+
+<h5 id="创建硬链接和链接符号"><a href="#创建硬链接和链接符号" class="headerlink" title="创建硬链接和链接符号"></a>创建硬链接和链接符号</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ln file link  创建硬链接   （就是为文件额外创建一个目录项）</span><br><span class="line">a.硬链接不能引用目录，只能引用文件</span><br><span class="line">b.硬链接不能跨物理设备</span><br><span class="line">ln -s item link 创建链接符号  （item可以是文件和目录）</span><br><span class="line">相当于用文本描述目标文件相对于符号链接的位置</span><br></pre></td></tr></table></figure>
+<h3 id="3-初步探索Linux"><a href="#3-初步探索Linux" class="headerlink" title="3.初步探索Linux"></a>3.<strong>初步探索Linux</strong></h3><h5 id="使用ls命令之乐"><a href="#使用ls命令之乐" class="headerlink" title="使用ls命令之乐"></a>使用ls命令之乐</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.  (一个点) 表示在当前目录</span><br><span class="line">ls 查看当前目录所包含的文件和子目录</span><br><span class="line">ls -l  将输出结果改成长格式</span><br><span class="line">ls -a  列出所有文件</span><br><span class="line">ls -d  显示目录本身的属性，而非其内部的文件列表  （只显示目录本身）</span><br><span class="line">ls -h  人性化显示容量信息，以K、M、G等单位表示文件大小。</span><br></pre></td></tr></table></figure>
+<h5 id="使用file命令确定文件类型"><a href="#使用file命令确定文件类型" class="headerlink" title="使用file命令确定文件类型"></a>使用file命令确定文件类型</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file filename</span><br></pre></td></tr></table></figure>
+
+<h5 id="使用less命令查看文本文件"><a href="#使用less命令查看文本文件" class="headerlink" title="使用less命令查看文本文件"></a>使用less命令查看文本文件</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">键G  移动到文件末尾</span><br><span class="line">键Q  退出less命令</span><br></pre></td></tr></table></figure>
+<h5 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">*  匹配任意多个字符</span><br><span class="line">  ls -d  /etc/*conf*   显示/etc目录下所有名字中包括“conf”的文件或目录。</span><br><span class="line">  ls -d /etc/pa*  列出/etc目录下所有以“pa”开头的文件或目录，j加上 -d 只显示目录本身,不显示其内容</span><br><span class="line">？ 匹配任意单个字符</span><br><span class="line">  ls -lh /dev/sa?  以长格式列出/dev目录中所有以“sd”开头并且文件名只有3个字符的文件信息。(sa给定，第三个字符任意(即？))</span><br><span class="line">通配符“[ ]”可以匹配指定范围内的任意单个字符。</span><br><span class="line">  ls /dev/[a-c]*列出/dev/目录中以“a”、“b”、“c”开头的所有文件。</span><br></pre></td></tr></table></figure>
+<h3 id="4-和命令打交道"><a href="#4-和命令打交道" class="headerlink" title="4.和命令打交道"></a>4.和命令打交道</h3><h5 id="识别命令"><a href="#识别命令" class="headerlink" title="识别命令"></a>识别命令</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">显示命令类型</span><br><span class="line">	type  command(要检查的文件名)</span><br><span class="line">显示可执行文件的位置</span><br><span class="line">	which command  </span><br></pre></td></tr></table></figure>
+<h5 id="获取命令文档"><a href="#获取命令文档" class="headerlink" title="获取命令文档"></a>获取命令文档</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">help--获取Shell内建命令的帮助信息</span><br><span class="line">	例如：help cd</span><br><span class="line">--help  显示用法信息</span><br><span class="line">	mkdir --help</span><br><span class="line">man 显示命令的手册页</span><br><span class="line">	例如 man ls</span><br><span class="line">	man section search_term  ；section指明节号</span><br><span class="line">	man -k 根据关键字查找</span><br><span class="line">显示适合的命令清单（根据关键字查找）</span><br><span class="line">	apropos partition(关键字)</span><br><span class="line">whatis --显示手册页的简述</span><br><span class="line">info--显示程序的info条目</span><br></pre></td></tr></table></figure>
+<h5 id="使用alias创建自己的命令"><a href="#使用alias创建自己的命令" class="headerlink" title="使用alias创建自己的命令"></a>使用alias创建自己的命令</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alias name=&#x27;string&#x27;    (name为自己所起的名字，string为命令)</span><br><span class="line">使用unalias命令可以删除别名</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="5-重定向"><a href="#5-重定向" class="headerlink" title="5.重定向"></a>5.重定向</h3><h5 id="标准输出重定向"><a href="#标准输出重定向" class="headerlink" title="标准输出重定向"></a>标准输出重定向</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">将ls -l /usr/bin  的输出结果保存在ls-output.txt中</span><br><span class="line">	ls - l/usr/bin &gt; ls-output.txt   （ls的结果本来应该输出在屏幕上）</span><br><span class="line">将重定向的标准输出追加到文件尾，而不是将其从头覆盖</span><br><span class="line">	使用 &gt;&gt; :  ls - l/usr/bin &gt;&gt; ls-output.txt</span><br><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">覆盖重定向  ； &gt;&gt; 追加重定向</span></span><br></pre></td></tr></table></figure>
+<h5 id="标准错误重定向"><a href="#标准错误重定向" class="headerlink" title="标准错误重定向"></a>标准错误重定向</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">标准错误重定向对应的描述符为2，以下将输出错误信息定向到 ls-error.txt</span><br><span class="line">例：ls -l /bin/usr  2&gt; ls-error.txt</span><br></pre></td></tr></table></figure>
+<h5 id="标准输入重定向"><a href="#标准输入重定向" class="headerlink" title="标准输入重定向"></a>标准输入重定向</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat 将键盘输入的内容在屏幕上原样输出</span><br><span class="line">cat 命令读取一个或多个文件并将其复制到标准输出（显示文本文件内容）</span><br><span class="line">创建一个文件存放从键盘输入的字符</span><br><span class="line"> a.cat lazy_dog.txt （换行）The quick brown fox jumped over the lazy dog.</span><br><span class="line"> b.查看lazy_dog .txt文件 例：cat lazy_dog.txt或者cat&lt;lazy_dog.txt</span><br></pre></td></tr></table></figure>
+<h5 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">管道符“|”用于连接左右两个命令，将“I”左边命令的执行结果作为“|”右边命令的输入</span><br><span class="line">  将标准输出的命令用less命令将其结果逐页显示出来</span><br><span class="line">	ls -l /usr/bin | less</span><br><span class="line">排序列表</span><br><span class="line">	ls  /bin/usr/bin  | sort |  less</span><br><span class="line">uniq--报告或忽略重复行</span><br><span class="line">	ls  /bin/usr/bin | sort | uniq | less</span><br><span class="line">wc 统计文件中换行符，单词以及直字节的数量</span><br><span class="line">	wc ls-error.txt   (输出三个数字分别是：行数，单词数，字节数)</span><br><span class="line">	wc -l 限制只输出文件行数</span><br><span class="line">grep 输出与模式匹配的行</span><br><span class="line">	grep pattren filename</span><br><span class="line">	-i 使grep命令在搜索的时候忽略字母的大小写</span><br><span class="line">	-v 使grep命令只输出不匹配指定模式的行</span><br><span class="line">	-r 可以匹配关键字在当前目录下的子目录中查找</span><br><span class="line">   head/tall 输出文件的开头/结尾部分（默认十行）</span><br><span class="line">	head -n 5 ls-output.txt (注意是文件)</span><br><span class="line">	运用在管道中：ls  /usr/bin |tail -n 5</span><br><span class="line">	tail -f 持续观察文件，一旦文件中添加新行，立即显示在屏幕中，ctrl+c停止</span><br><span class="line">tee 读取标准输入并将输出结果写入标准输出的文件id</span><br><span class="line">diff file1 file2  比较两个文件的不同；结果中的a,b,c分别代表添加，删除和修改;以&quot;&lt;&quot;开始的行属于文件1，以“&gt;”开始的行属于文件2。</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-Shell眼看世界"><a href="#6-Shell眼看世界" class="headerlink" title="6. Shell眼看世界"></a>6. Shell眼看世界</h3><h5 id><a href="#" class="headerlink" title></a></h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">算术扩展(仅支持整数，不支持小数)</span><br><span class="line">   	echo $((expression))    echo $((2+2))</span><br><span class="line">	/  : 除法 ，结果为整数</span><br><span class="line">	*  : 求幂</span><br><span class="line">花括号扩展</span><br><span class="line">	echo Front-&#123;A,B,C&#125;-Back</span><br><span class="line">	  结果：Front-A-Back Front-B-Back Front-C-Back</span><br><span class="line">	echo &#123;01..15&#125;</span><br><span class="line">	  01 02 03 04 05 06 07 08 09 10 11 12 13 14 15</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-高级键盘技巧"><a href="#7-高级键盘技巧" class="headerlink" title="7. 高级键盘技巧"></a>7. 高级键盘技巧</h3><h5 id="光表移动"><a href="#光表移动" class="headerlink" title="光表移动"></a>光表移动</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Ctrl+A      将光标移动到首行</span><br><span class="line">Ctrl+E      将光标移动到行尾</span><br><span class="line">Ctrl+F      将光标v向前移动一个字符；等同于右方向键位</span><br><span class="line">Ctrl+B      将光表向后移动一个字符；等同于左方向键位</span><br><span class="line">Ctrl+L      清除屏幕，将光标移动到左上角。等同于clear命令</span><br></pre></td></tr></table></figure>
+<h5 id="修改文本"><a href="#修改文本" class="headerlink" title="修改文本"></a>修改文本</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Ctrl+D      删除光标处的字符</span><br><span class="line">Ctrl+T      将光标出的字符与其之前的单词对调</span><br></pre></td></tr></table></figure>
+<h5 id="剪切和粘贴文本"><a href="#剪切和粘贴文本" class="headerlink" title="剪切和粘贴文本"></a>剪切和粘贴文本</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Ctrl+K      剪切从光标处到行尾的文本</span><br><span class="line">Ctrl+U      剪切从光标处到行首的文本</span><br><span class="line">Ctrl+Y      将kill-ring缓冲区内的文本粘贴到光标</span><br></pre></td></tr></table></figure>
+<h5 id="搜索历史记录"><a href="#搜索历史记录" class="headerlink" title="搜索历史记录"></a>搜索历史记录</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Ctrl+P  移动到上一条搜索记录。等同于使用上方向建</span><br><span class="line">Ctrl+N  移动到下一条搜索记录。等同于使用下方向建</span><br><span class="line">Ctrl+R  反向增量搜索。从当前命令行开始向上增量搜索历史记录列表</span><br><span class="line">Ctil+O   执行历史记录列表中的当前命令并移动到下一条命令。如果你想要重复执行历史列表中的一系列命令，该组合键非常方便</span><br><span class="line">！！  重复上一条命令</span><br><span class="line">！number 重复命令历史记录列表中第number个命令</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://yellowsy.github.io/2022/09/13/Linex%E5%91%BD%E4%BB%A4/" title="Linex命令" target="_blank" rel="external">https://yellowsy.github.io/2022/09/13/Linex命令/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/cofess" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/cofess" target="_blank"><span class="text-dark">星星失眠啦</span><small class="ml-1x">梅花何止落满一座南山</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2022/09/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" title="适合发朋友圈的文案"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://yellowsy.github.io" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

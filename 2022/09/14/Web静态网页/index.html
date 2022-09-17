@@ -18,19 +18,19 @@
   
   
   <title>Web静态网页 | 月亮十六便士</title>
-  <meta name="description" content="1. 一个有趣的猜数游戏 该游戏会随机生成一个0-99之内的整数，你有十次猜数的机会，点击开始即可猜数。                         猜数游戏	                                        var rnd;             var pID&#x3D;null;             var count	&#x2F;&#x2F;设置猜测次数：10次">
+  <meta name="description" content="1. 一个有趣的猜数游戏 该游戏会随机生成一个0-99之内的整数，你有十次猜数的机会，点击开始即可猜数。                          猜数游戏	                                        var rnd;             var pID&#x3D;null;             var count	&#x2F;&#x2F;设置猜测次数：10次">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Web静态网页">
 <meta property="og:url" content="https://yellowsy.github.io/2022/09/14/Web%E9%9D%99%E6%80%81%E7%BD%91%E9%A1%B5/index.html">
 <meta property="og:site_name" content="紫薯与你">
-<meta property="og:description" content="1. 一个有趣的猜数游戏 该游戏会随机生成一个0-99之内的整数，你有十次猜数的机会，点击开始即可猜数。                         猜数游戏	                                        var rnd;             var pID&#x3D;null;             var count	&#x2F;&#x2F;设置猜测次数：10次">
+<meta property="og:description" content="1. 一个有趣的猜数游戏 该游戏会随机生成一个0-99之内的整数，你有十次猜数的机会，点击开始即可猜数。                          猜数游戏	                                        var rnd;             var pID&#x3D;null;             var count	&#x2F;&#x2F;设置猜测次数：10次">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/yellowsy/cloudimg/main/img/202209171349662.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/yellowsy/cloudimg/main/img/202209171350753.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/yellowsy/cloudimg/main/img/202209171350936.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/yellowsy/cloudimg/main/img/202209171351056.png">
 <meta property="article:published_time" content="2022-09-14T09:46:03.000Z">
-<meta property="article:modified_time" content="2022-09-17T06:32:58.979Z">
+<meta property="article:modified_time" content="2022-09-17T08:06:26.823Z">
 <meta property="article:author" content="Huang_SY">
 <meta property="article:tag" content="程序员">
 <meta name="twitter:card" content="summary">
@@ -60,7 +60,7 @@
       
       
       <div class="profile-block text-center">
-        <a id="avatar" href="https://github.com/cofess" target="_blank">
+        <a id="avatar" href="https://yellowsy.github.io" target="_blank">
           <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
         </a>
         <h2 id="name" class="hidden-xs hidden-sm">星星失眠啦</h2>
@@ -382,7 +382,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/14/Web%E9%9D%99%E6%80%81%E7%BD%91%E9%A1%B5/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 101(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 138(字)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
@@ -392,7 +392,9 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h3 id="1-一个有趣的猜数游戏"><a href="#1-一个有趣的猜数游戏" class="headerlink" title="1. 一个有趣的猜数游戏"></a>1. 一个有趣的猜数游戏</h3><p> 该游戏会随机生成一个0-99之内的整数，你有十次猜数的机会，点击开始即可猜数。</p>
+        <h3 id="1-一个有趣的猜数游戏"><a href="#1-一个有趣的猜数游戏" class="headerlink" title="1. 一个有趣的猜数游戏"></a>1. 一个有趣的猜数游戏</h3><ul>
+<li>该游戏会随机生成一个0-99之内的整数，你有十次猜数的机会，点击开始即可猜数。</li>
+</ul>
 <!DOCTYPE html>
 <html>
     <head>
@@ -454,17 +456,220 @@
 
 
 
+<!--时刻和,计算器,幻灯片代码开始-->
 
-
-<h3 id="4-幻灯片"><a href="#4-幻灯片" class="headerlink" title="4. 幻灯片"></a>4. 幻灯片</h3><!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-        <script src="./jquery-3.2.0.min.js"></script>
-        <script>
-            $(function(){
-                index=0
+ <head>
+  <meta charset="utf-8">
+  <title></title>
+  <script src="./jquery-1.11.2.js"></script>
+  <style>
+    /*时刻css样式*/
+    #btntime{
+        width:300px;
+        height:20px;
+        border-radius: 30px;
+        background-color: pink;
+        margin-top: 10px;
+    }
+    #star{
+        background-color: greenyellow;
+        border-radius: 30px;
+    }
+    #stop{
+        background-color: orangered;
+        border-radius: 30px;
+    }
+    /*计算器css样式*/
+   #boxfirst{
+    width:340px;
+    height:340px;
+    border-radius:5px;
+    background-color: #004488;
+    box-shadow:0px 0px 10px #fff;
+    margin:20px auto;
+    padding:10px
+   }
+   #result{
+    width:260px;
+    height:30px;
+    border-radius:5px;
+    border:1px solid yellow;
+    margin:0px auto;
+    background-color: #fff7b2;
+    text-align:right;
+    line-height:20px;
+    padding:5px;
+    font-size: 20px;
+   }
+   #boxfirst ul{
+       list-style:none;
+       width:300px;
+       height:300px;
+    margin:0px 20px;
+   }
+   #boxfirst ul li{
+    width:30px;
+    height:30px;
+    color:#fff;
+    border-radius:5px;
+    box-shadow:0px 0px 10px #fff;
+    float:left;
+    margin:12px;
+    text-align: center;
+    line-height: 35px;
+    font-size: 23px;
+    cursor:pointer;
+   }
+   .tool{
+    background-color: pink;
+   }
+   .equal{
+    background-color: orange;
+   }
+   /*幻灯片样式*/
+   #box{
+   width:500px;
+   height:280px;
+   border: 1px solid black;
+   margin:20px auto;
+   overflow:hidden;/*隐藏溢出部分*/
+   position:relative;
+   }
+   #box ul.img{
+   list-style:none;
+   margin-top:0px;
+   margin-left:0px;
+   }
+   #box ul.img li{
+   position:absolute;
+   display:none;
+   }
+   #box ul.img li.active{
+   display:block;/*显示图片*/
+   }
+   #box ul.btn{
+   list-style:none;
+   position:absolute;
+   bottom:20px;
+   left:20px;
+   }
+   #box ul.btn li{
+   width:20px;
+   height:20px;
+   border:2px solid orangered;
+   border-radius:50%;
+   float:left;
+   margin:10px;
+   text-align:center;
+   line-height:20px;
+   cursor:pointer;/*鼠标为指针*/
+   color:orangered;
+   }
+   #box ul.btn li.on{
+   color:white;
+   background-color: orangered;
+   }
+   #box ul.next{
+   list-style:none;
+   position:absolute;
+   top:130px;
+   left:0px;
+   }
+   #box ul.next li.right{
+   margin-left: 390px;
+   }
+   #box ul.next li{
+   width:40px;
+   height:40px;
+   border:2px solid orangered;
+   border-radius:50%;
+   float:left;
+   text-align:center;
+   line-height:40px;
+   color:orangered;
+   cursor:pointer;
+   }
+  </style>
+
+  <script>
+    window.onload=function(){
+        <!--时刻js-->
+        function monment(){
+                starBtn=window.document.getElementById("star")
+                stopBtn=window.document.getElementById("stop")
+                starBtn.onclick=function(){
+                    mytime()
+                    starTime=window.setInterval(mytime,1000)
+                    //starBtn.disabled="false"//false不启用该属性
+                    //true启用该属性
+                }
+                stopBtn.onclick=function(){
+                    clearInterval(starTime)
+                    myBtn.innerHTML=" "
+                    //stopBtn.disabled="false"
+                }
+                function mytime(){
+                    myBtn=document.getElementById("btntime")
+                    thisTime=new Date()
+                    myBtn.innerHTML=thisTime.getFullYear()+"年"
+                    myBtn.innerHTML+=time(thisTime.getMonth()+1)+"月"
+                    myBtn.innerHTML+=time(thisTime.getDate())+"日"
+                    myBtn.innerHTML+=time(thisTime.getHours())+":"
+                    myBtn.innerHTML+=time(thisTime.getMinutes())+":"
+                    myBtn.innerHTML+=time(thisTime.getSeconds())
+                }
+                function time(x){
+                    return x>9?x:"0"+x
+                }
+            }
+        <!--计时器js-->
+        function calculator(){
+            let display=document.getElementById("result")
+     		let myDiv=document.getElementById("num").getElementsByTagName("li")
+     		//指定ul的所有li,以免影响到其他的li
+            for(let i=0;i<myDiv.length;i++){
+             myDiv[i].onclick=function(){
+              //display.innerHTML=this.innerHTML（单击数字后取出让它给显示框）
+              switch(this.innerHTML){
+               case "C":
+                    display.innerHTML="0"
+                    break;
+               case "0":
+               case "1":
+               case "2":
+               case "3":
+               case "4":
+               case "5":
+               case "6":
+               case "7":
+               case "8":
+               case "9":
+               case "00":
+               case "+":
+               case "-":
+               case "*":
+               case "/":
+               case "%":
+                    var str=display.innerHTML
+                 if(str=="0")str=""
+                 display.innerHTML=str+this.innerHTML
+                 break;
+               case "=":
+                   display.innerHTML=eval(display.innerHTML)//计算显示框内式子
+                   break; 
+               case "←":
+                   sth=new String(display.innerHTML)
+                   s=sth.substring(0,sth.length-1)
+                   display.innerHTML=s
+                   break; //删除 用弹出函数删除字符串的最后一个字符
+              }
+             }
+          }
+        }
+        function slide(){
+            index=0
                 play=setInterval(autoplay,5000)
                 function autoplay(){
                     index++;
@@ -497,75 +702,54 @@
                     index++;
                     run()
                 })
-            })
-        </script>
-        <style>
-            #box{
-                width:500px;
-                height:280px;
-                border: 1px solid black;
-                margin:20px auto;
-                overflow:hidden;/*隐藏溢出部分*/
-                position:relative;
-            }
-            #box ul.img{
-                list-style:none;
-                margin-top:0px;
-                margin-left:0px;
-            }
-            #box ul.img li{
-                position:absolute;
-                display:none;
-            }
-            #box ul.img li.active{
-                display:block;/*显示图片*/
-            }
-            #box ul.btn{
-                list-style:none;
-                position:absolute;
-                bottom:20px;
-                left:20px;
-            }
-            #box ul.btn li{
-                width:20px;
-                height:20px;
-                border:2px solid orangered;
-                border-radius:50%;
-                float:left;
-                margin:10px;
-                text-align:center;
-                line-height:20px;
-                cursor:pointer;/*鼠标为指针*/
-                color:orangered;
-            }
-            #box ul.btn li.on{
-                color:white;
-                background-color: orangered;
-            }
-            #box ul.next{
-                list-style:none;
-                position:absolute;
-                top:130px;
-                left:0px;
-            }
-            #box ul.next li.right{
-                margin-left: 390px;
-            }
-            #box ul.next li{
-                width:40px;
-                height:40px;
-                border:2px solid orangered;
-                border-radius:50%;
-                float:left;
-                text-align:center;
-                line-height:40px;
-                color:orangered;
-                cursor:pointer;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="box">
+        }
+        slide();
+        monment();
+        calculator();
+    }
+   </script>
+ </head>
+ <body>
+    <!-- 时刻布局 -->
+    <h3 style="font-size: 22px;">2. 显示当前时刻</h3>
+    <p>点击开始获取当前时刻并显示在下面方框内，点击停止结束时间显示</p>
+     <center>
+         <button id="star">开始</button>
+         <button id="stop">停止</button>
+         <div id="btntime">请点击开始显示！</div>
+     </center>
+     <!--计算器布局-->
+     <h3 style="font-size: 20px;">3. 一个简单的计算器</h3>
+     <p>实现整数之间的加减乘除，箭头实现退格，C实现清零 </p>
+      <div id="boxfirst">
+       <center><span style="color: orange; font-size: 25px;">计算器</span></center>
+       <div id="result">0</div>
+       <ul id="num">
+        <li>7</li>
+        <li>8</li>
+        <li>9</li>
+        <li class="tool">←</li>
+        <li class="tool">C</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li class="tool">*</li>
+        <li class="tool">/</li>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li class="tool">+</li>
+        <li class="tool">-</li>
+        <li>0</li>
+        <li>00</li>
+        <li>.</li>
+        <li class="tool">%</li>
+        <li class="tool equal">=</li>
+       </ul>
+      </div>
+      <!--幻灯片布局-->
+      <h3 style="font-size: 20px;">4. 幻灯片</h3>
+      <div id="box">
             <ul class="img">
                 <li class="active"><img src="https://raw.githubusercontent.com/yellowsy/cloudimg/main/img/202209171349662.png" width="500px" height="300px"></li>
                 <li><img src="https://raw.githubusercontent.com/yellowsy/cloudimg/main/img/202209171350753.png" width="500px" height="300px"></li>
@@ -583,8 +767,12 @@
                 <li class="right">></li>
             </ul>
         </div>
-    </body>
+ </body>
 </html>
+
+<!--时刻和,计算器,幻灯片代码开始-->
+
+
 
       
     </div>
@@ -608,12 +796,12 @@
   <div class="panel-body">
     <figure class="media">
       <div class="media-left">
-        <a href="https://github.com/cofess" target="_blank" class="img-burn thumb-sm visible-lg">
+        <a href="https://yellowsy.github.io" target="_blank" class="img-burn thumb-sm visible-lg">
           <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading"><a href="https://github.com/cofess" target="_blank"><span class="text-dark">星星失眠啦</span><small class="ml-1x">梅花何止落满一座南山</small></a></h3>
+        <h3 class="media-heading"><a href="https://yellowsy.github.io" target="_blank"><span class="text-dark">星星失眠啦</span><small class="ml-1x">梅花何止落满一座南山</small></a></h3>
         <div>个人简介。</div>
       </div>
     </figure>

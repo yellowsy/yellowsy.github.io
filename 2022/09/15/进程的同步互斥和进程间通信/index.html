@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>进程的同步互斥和进程间通信 | 月亮十六便士</title>
+  <meta name="description" content="一、   引起同步互斥问题的原因同步：因为一些任务不是有一个进程实现，而是通过多个进程共同实现，所以这些进程之间按照一定的规则，互相协调合作共同实现某一任务而进行同步。 互斥：因为在多个程序并发执行时，由于共享系统资源，对于临界资源，多个进程只能进行互斥的访问，即每次只能允许一个进程访问，所以这些进程对于该资源的访问就形成了相互制约的关系。 二、   同步互斥方法说明2.1 互斥锁同步互斥方法说明">
+<meta property="og:type" content="article">
+<meta property="og:title" content="进程的同步互斥和进程间通信">
+<meta property="og:url" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/index.html">
+<meta property="og:site_name" content="紫薯与你">
+<meta property="og:description" content="一、   引起同步互斥问题的原因同步：因为一些任务不是有一个进程实现，而是通过多个进程共同实现，所以这些进程之间按照一定的规则，互相协调合作共同实现某一任务而进行同步。 互斥：因为在多个程序并发执行时，由于共享系统资源，对于临界资源，多个进程只能进行互斥的访问，即每次只能允许一个进程访问，所以这些进程对于该资源的访问就形成了相互制约的关系。 二、   同步互斥方法说明2.1 互斥锁同步互斥方法说明">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image002.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image004.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image006.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image008.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image010.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image012.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image014.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image016.jpg">
+<meta property="article:published_time" content="2022-09-14T16:28:12.000Z">
+<meta property="article:modified_time" content="2022-09-17T04:45:12.012Z">
+<meta property="article:author" content="Huang_SY">
+<meta property="article:tag" content="程序员">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image002.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="紫薯与你" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/cofess" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">星星失眠啦</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">梅花何止落满一座南山</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Wuhan, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://yellowsy.github.io" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML/">HTML</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%96%87%E6%A1%88/">文案</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/" rel="tag">程序员</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 13px;">生活</a> <a href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/" style="font-size: 14px;">程序员</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" class="title">进程的同步互斥和进程间通信</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-14T16:28:12.000Z" itemprop="datePublished">2022-09-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/HTML/">HTML</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/14/Web%E9%9D%99%E6%80%81%E7%BD%91%E9%A1%B5/" class="title">Web静态网页</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-14T09:46:03.000Z" itemprop="datePublished">2022-09-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/13/Linex%E5%91%BD%E4%BB%A4/" class="title">Linex命令</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-13T12:46:03.000Z" itemprop="datePublished">2022-09-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%96%87%E6%A1%88/">文案</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" class="title">适合发朋友圈的文案</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-12T12:19:21.000Z" itemprop="datePublished">2022-09-12</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-进程的同步互斥和进程间通信" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      进程的同步互斥和进程间通信
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" class="article-date">
+	  <time datetime="2022-09-14T16:28:12.000Z" itemprop="datePublished">2022-09-15</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/" rel="tag">程序员</a>
+  </span>
+
+
+        
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" class="leancloud_visitors"  data-flag-title="进程的同步互斥和进程间通信">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3.6k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 15(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="一、-引起同步互斥问题的原因"><a href="#一、-引起同步互斥问题的原因" class="headerlink" title="一、   引起同步互斥问题的原因"></a>一、   引起同步互斥问题的原因</h1><p>同步：因为一些任务不是有一个进程实现，而是通过多个进程共同实现，所以这些进程之间按照一定的规则，互相协调合作共同实现某一任务而进行同步。</p>
+<p>互斥：因为在多个程序并发执行时，由于共享系统资源，对于临界资源，多个进程只能进行互斥的访问，即每次只能允许一个进程访问，所以这些进程对于该资源的访问就形成了相互制约的关系。</p>
+<h1 id="二、-同步互斥方法说明"><a href="#二、-同步互斥方法说明" class="headerlink" title="二、   同步互斥方法说明"></a>二、   同步互斥方法说明</h1><h2 id="2-1-互斥锁同步互斥方法说明"><a href="#2-1-互斥锁同步互斥方法说明" class="headerlink" title="2.1 互斥锁同步互斥方法说明"></a>2.1 互斥锁同步互斥方法说明</h2><p>当多个线程对公共资源进行访问和写入时，加上互斥锁以保证数据不会被多个线程操作时而混乱。下面以简单读，写操作来说明。一个线程从共享的缓冲区中读取操作，另一个线程向缓冲区中写数据，保证不会对共享缓冲区同时读取和写入，对共享缓冲区的访问加上互斥锁实现。通过线程函数pthread_create()在主进程中创建两个线程，一个进行读取，另一个进行写入，如果缓冲区为空，那么就向缓冲区中写入数据，并将buffer_has_sem设置为1，让读线程可以读取数据。读线程则先判断缓冲区是否为空，不为空为输出数据。</p>
+<h2 id="2-2-条件变量同步互斥方法说明"><a href="#2-2-条件变量同步互斥方法说明" class="headerlink" title="2.2 条件变量同步互斥方法说明"></a>2.2 条件变量同步互斥方法说明</h2><p>条件变量是对互斥锁的补充，它的作用是用于多线程之间关于共享数据状态变化的通信，它允许线程阻塞并等待另一个线程发送的信号。当收到信号时，阻塞的线程就被唤醒并试图锁定与之相关的互斥锁。以哲学家就餐例子说明。哲学家拿到左右的两只筷子就可以开始吃饭，吃完饭放下筷子思考，利用互斥锁和条件变量进行同步互斥。因为对筷子数量的访问属于临界资源访问，所以对i号哲学家拿筷子进行上锁，拿完后便开锁。当i号哲学家拿不到左右两只筷子时，便通过条件变量开始等待，其他哲学吃完放下筷子后可以发送信号给该哲学家，当他再次发现筷子可用时便开始吃饭。以通信的方式来实现两者的同步互斥。</p>
+<h2 id="2-3-信号量同步互斥方法说明"><a href="#2-3-信号量同步互斥方法说明" class="headerlink" title="2.3 信号量同步互斥方法说明"></a>2.3 信号量同步互斥方法说明</h2><p>信号量是一个用于表示资源数目的整型量S，它仅能通过两个标准的原子操作wait(S)和signal(S)来访问，它是具有一个等待队列的计数器，属于临界资源的一种，要获取信号量资源，则对信号量进行-1操作，要释放信号量资源，则对信号量资源进行+1操作。以读者写者问题进行说明。读和写操作不能同时进行。允许多个读者同时读取数据，通过设置rw_mutex信号量来实现读写进程的互斥访问，read_cound来统计读者的数量，mutex用于对read_cound同步互斥的访问。<strong>一旦一个读者获得了读锁，其他的读者也可以获取这个读锁。但是，想要获取写锁的线程，就必须等到所有的读者都结束。</strong></p>
+<h2 id="2-4-屏障同步互斥方法说明"><a href="#2-4-屏障同步互斥方法说明" class="headerlink" title="2.4 屏障同步互斥方法说明"></a>2.4 屏障同步互斥方法说明</h2><p>  屏障是用户协调多个线程并行工作的同步机制。当线程到达屏障点时，它不能继续，直到所有其他的线程也已经到这一点。当最后的线程到达屏障点时，所有线程被释放，并且能够恢复并发执行。使用pthread_barrier_init()函数对屏障进行初始化，使用count参数指定，在允许所有线程继续运行之前，必须到达屏障的线程数目。使用pthread_barrier_wait()函数来表明，线程已工作完成，准备等所有其他线程赶上来。以选手评分例子说明。在主线程中创建3个子线程，一个求最高分，另一个求最低分，最后一个线程去掉最高分和最低分后求其平均值，该线程在求最后平均分时必须要等到另外两个子线程求出最高分和最低分。求出的最后得分在主线程中输出。</p>
+<h1 id="三、-同步互斥方法实现"><a href="#三、-同步互斥方法实现" class="headerlink" title="三、   同步互斥方法实现"></a>三、   同步互斥方法实现</h1><h2 id="3-1互斥锁同步互斥方法实现"><a href="#3-1互斥锁同步互斥方法实现" class="headerlink" title="3.1互斥锁同步互斥方法实现"></a>3.1互斥锁同步互斥方法实现</h2><h3 id="3-1-1-互斥锁同步互斥示例代码"><a href="#3-1-1-互斥锁同步互斥示例代码" class="headerlink" title="3.1.1 互斥锁同步互斥示例代码"></a>3.1.1 互斥锁同步互斥示例代码</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FALSE 0</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> TRUE 1</span></span><br><span class="line"><span class="type">char</span> buffer[<span class="number">256</span>];<span class="comment">//定义共享缓冲区</span></span><br><span class="line"><span class="type">int</span> buffer_has_item=<span class="number">0</span>;<span class="comment">//判断缓冲区是否有数据</span></span><br><span class="line"><span class="type">int</span> retflag=FALSE;</span><br><span class="line"><span class="type">pthread_mutex_t</span> mutex;<span class="comment">//定义互斥锁</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">readfun</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="keyword">if</span>(retflag)</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">   pthread_mutex_lock(&amp;mutex);<span class="comment">//对读操作进行上锁</span></span><br><span class="line">   <span class="keyword">if</span>(buffer_has_item==<span class="number">1</span>)</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;reader：%s\n&quot;</span>,buffer);</span><br><span class="line">      buffer_has_item=<span class="number">0</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   pthread_mutex_unlock(&amp;mutex);<span class="comment">//对读操作进行开锁</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">writefun</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> i=<span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="keyword">if</span>(i==<span class="number">5</span>)<span class="comment">//写入5个数据就退出</span></span><br><span class="line">   &#123;</span><br><span class="line">      retflag=TRUE;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   pthread_mutex_lock(&amp;mutex);<span class="comment">//对写入操作进行上锁</span></span><br><span class="line">   <span class="keyword">if</span>(buffer_has_item==<span class="number">0</span>)</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;writer：%c\n&quot;</span>,i+’a’);</span><br><span class="line">      <span class="built_in">sprintf</span>(buffer,<span class="string">&quot;%c&quot;</span>,i+’a’);</span><br><span class="line">      buffer_has_item=<span class="number">1</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   pthread_mutex_unlock(&amp;mutex);<span class="comment">//对写入操作进行开锁</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">//定义两个线程ID</span></span><br><span class="line">  <span class="type">pthread_t</span> reader;</span><br><span class="line">  <span class="type">pthread_t</span> writer;</span><br><span class="line">  pthread_mutex_init(&amp;mutex,<span class="literal">NULL</span>);<span class="comment">//初始化互斥锁 </span></span><br><span class="line">  <span class="comment">//创建两个子线程</span></span><br><span class="line">  pthread_create(&amp;reader,<span class="literal">NULL</span>,(<span class="type">void</span>*)&amp;readfun,<span class="literal">NULL</span>);</span><br><span class="line">  pthread_create(&amp;writer,<span class="literal">NULL</span>,(<span class="type">void</span>*)&amp;writefun,<span class="literal">NULL</span>); </span><br><span class="line">  <span class="comment">//等待两个子线程结束</span></span><br><span class="line">  pthread_join(reader,<span class="literal">NULL</span>);</span><br><span class="line">  pthread_join(writer,<span class="literal">NULL</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="编译后运行："><a href="#编译后运行：" class="headerlink" title="编译后运行："></a>编译后运行：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image002.jpg" alt="img"> </p>
+<h5 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image004.jpg" alt="img"> </p>
+<h3 id="3-1-2-互斥锁同步互斥关键代码说明"><a href="#3-1-2-互斥锁同步互斥关键代码说明" class="headerlink" title="3.1.2 互斥锁同步互斥关键代码说明"></a>3.1.2 互斥锁同步互斥关键代码说明</h3><p>（1）函数说明：</p>
+<p>​	pthread_mutex_inti(&amp;mutex,NULL); &#x2F;&#x2F;初始化互斥锁</p>
+<p>​	pthread_mutex_lock(&amp;mutex); &#x2F;&#x2F;上锁</p>
+<p>​	pthread_mutex_unlock(&amp;mutex); &#x2F;&#x2F;开锁</p>
+<p>​	pthread_join(reader,NULL); &#x2F;&#x2F;等待写入线程结束</p>
+<p>​	pthread_join(writer,NULL);&#x2F;&#x2F;等待读取线程结束</p>
+<p>  （2）临界区资源buffer_has_item</p>
+<p>​     if(buffer_has_item&#x3D;&#x3D;1){</p>
+<p>​     	printf(“read：%s\n”,buffer);</p>
+<p>​     	buffer_has_item&#x3D;0;</p>
+<p>​     }</p>
+<p>​     if(buffer_has_item&#x3D;&#x3D;0){</p>
+<p>​     	printf(“write：%c\n”,i+’a’);</p>
+<p>​     	sprintf(buffer,”%c”,i+’a’);</p>
+<p>​     	buffer_has_item&#x3D;1;</p>
+<p>​     }</p>
+<h2 id="3-2互斥锁同步互斥方法实现"><a href="#3-2互斥锁同步互斥方法实现" class="headerlink" title="3.2互斥锁同步互斥方法实现"></a>3.2互斥锁同步互斥方法实现</h2><h3 id="3-2-1-条件变量同步互斥示例代码"><a href="#3-2-1-条件变量同步互斥示例代码" class="headerlink" title="3.2.1 条件变量同步互斥示例代码"></a>3.2.1 条件变量同步互斥示例代码</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> N 6</span></span><br><span class="line"><span class="type">int</span> philosopher_num=<span class="number">0</span>;<span class="comment">//定义想吃的哲学家的数量</span></span><br><span class="line"><span class="type">int</span> chopstick[N]=&#123;<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>&#125;;<span class="comment">//初始化筷子数量</span></span><br><span class="line"></span><br><span class="line"><span class="type">pthread_mutex_t</span> mutex;<span class="comment">//定义对拿筷子的互斥访问</span></span><br><span class="line"><span class="type">pthread_mutex_t</span> num;<span class="comment">//定义对philosopher_num的互斥访问</span></span><br><span class="line"><span class="type">pthread_cond_t</span> cond_Var;<span class="comment">//定义条件变量</span></span><br><span class="line"> </span><br><span class="line"><span class="type">void</span> <span class="title function_">pick_forks</span><span class="params">(<span class="type">int</span> i)</span></span><br><span class="line">&#123;</span><br><span class="line">  pthread_mutex_lock(&amp;num);<span class="comment">//对临界资源上锁</span></span><br><span class="line">  philosopher_num++;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%d号哲学家想吃饭，共有%d个哲学家想吃饭\n&quot;</span>,i,philosopher_num);</span><br><span class="line">  pthread_mutex_unlock(&amp;num);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">return_forks</span><span class="params">(<span class="type">int</span> i)</span></span><br><span class="line">&#123;</span><br><span class="line">  pthread_mutex_lock(&amp;num);<span class="comment">//对临界资源上锁</span></span><br><span class="line">  philosopher_num--;</span><br><span class="line">  pthread_mutex_unlock(&amp;num);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%d号哲学家已吃完开始思考\n&quot;</span>,i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span>* <span class="title function_">philosopher</span><span class="params">(<span class="type">void</span>* arg)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> i=*(<span class="type">int</span>*)arg;<span class="comment">//哲学家编号</span></span><br><span class="line">  pick_forks(i);</span><br><span class="line">  pthread_mutex_lock(&amp;mutex);</span><br><span class="line">  <span class="keyword">while</span>(chopstick[i]==<span class="number">0</span>||chopstick[(i+<span class="number">1</span>)%N]==<span class="number">0</span>)</span><br><span class="line">  pthread_cond_wait(&amp;cond_Var,&amp;mutex);<span class="comment">//判断i号哲学家左右两边是否有筷子，如果没有就等待</span></span><br><span class="line">  chopstick[i]--;</span><br><span class="line">  chopstick[(i+<span class="number">1</span>)%N]--;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%d eating\n&quot;</span>,i);<span class="comment">//哲学家拿到筷子便开始吃饭</span></span><br><span class="line">  pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">  pthread_mutex_lock(&amp;mutex);</span><br><span class="line">  chopstick[i]++;</span><br><span class="line">  chopstick[(i+<span class="number">1</span>)%N]++;</span><br><span class="line">  return_forks(i);<span class="comment">//哲学家吃完饭放下筷子开始思考</span></span><br><span class="line">  pthread_cond_signal(&amp;cond_Var);<span class="comment">//i号哲学家吃完，告诉其他哲学家筷子可用</span></span><br><span class="line">  pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">  pthread_exit(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> i,arr[N]=&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;<span class="comment">//定义哲学家编号 </span></span><br><span class="line">  pthread_mutex_init(&amp;mutex,<span class="literal">NULL</span>);</span><br><span class="line">  pthread_mutex_init(&amp;num,<span class="literal">NULL</span>);</span><br><span class="line">  pthread_cond_init(&amp;cond_Var,<span class="literal">NULL</span>);</span><br><span class="line">  <span class="type">pthread_t</span> phil[N];</span><br><span class="line">  <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;N;i++)</span><br><span class="line">  &#123;</span><br><span class="line">   pthread_create(phil+i,<span class="literal">NULL</span>,(<span class="type">void</span>*)&amp;philosopher,&amp;arr[i]);<span class="comment">//创建六个哲学家线程</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;N;i++)<span class="comment">//等待子线程结束</span></span><br><span class="line">  &#123;</span><br><span class="line">   pthread_join(phil[i],<span class="literal">NULL</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="编译并执行："><a href="#编译并执行：" class="headerlink" title="编译并执行："></a>编译并执行：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image006.jpg" alt="img"> </p>
+<h5 id="执行结果："><a href="#执行结果：" class="headerlink" title="执行结果："></a>执行结果：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image008.jpg" alt="img"> </p>
+<h3 id="3-2-2-条件变量同步互斥关键代码说明"><a href="#3-2-2-条件变量同步互斥关键代码说明" class="headerlink" title="3.2.2 条件变量同步互斥关键代码说明"></a>3.2.2 条件变量同步互斥关键代码说明</h3><p>（1）想吃饭的哲学家数量为临界资源，对其进行上锁</p>
+<p>​	pthread_mutex_lock(&amp;num);&#x2F;&#x2F;对临界资源上锁<br>​	philosopher_num–;<br>​	pthread_mutex_unlock(&amp;num);</p>
+<p>（2）哲学家进行吃饭时，通过pthread_mutex_lock(&amp;mutex)对哲学家访问筷子临界资源进行上锁。当拿不到左右筷子时进行等待。while循环是为了被唤醒后继续进行条件判断。当条件满足时wait()将线程阻塞后会释放互斥锁lock,以便其他进程能访问共享变量。别唤醒后进行上锁，以免其他线程进入。</p>
+<p>​	pthread_mutex_lock(&amp;mutex);</p>
+<p>​    while(chopstick[i]&#x3D;&#x3D;0||chopstick[(i+1)%N]&#x3D;&#x3D;0)</p>
+<p>   pthread_cond_wait(&amp;cond_Var,&amp;mutex);</p>
+<p>   chopstick[i]–;</p>
+<p>   chopstick[(i+1)%N]–;</p>
+<p>   printf(“%d eating\n”,i);&#x2F;&#x2F;哲学家拿到筷子便开始吃饭</p>
+<p>   pthread_mutex_unlock(&amp;mutex);</p>
+<p>（3）哲学家吃完饭，放下筷子然后通过pthread_cond_signal(&amp;cond_Var)发送信号告诉其他哲学家他左右两边筷子可用，让等待的线程可以继续运行</p>
+<p>  pthread_mutex_lock(&amp;mutex);</p>
+<p>  chopstick[i]++;</p>
+<p>  chopstick[(i+1)%N]++;</p>
+<p>  return_forks(i);&#x2F;&#x2F;哲学家吃完饭放下筷子开始思考</p>
+<p>  pthread_cond_signal(&amp;cond_Var);&#x2F;&#x2F;i号哲学家吃完告诉其他哲学家筷子可用</p>
+<p>  pthread_mutex_unlock(&amp;mutex);</p>
+<h2 id="3-3-信号量同步互斥方法实现"><a href="#3-3-信号量同步互斥方法实现" class="headerlink" title="3.3 信号量同步互斥方法实现"></a>3.3 信号量同步互斥方法实现</h2><h3 id="3-3-1-信号量同步互斥示例代码"><a href="#3-3-1-信号量同步互斥示例代码" class="headerlink" title="3.3.1 信号量同步互斥示例代码"></a>3.3.1 信号量同步互斥示例代码</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">sem_t</span> rw_mutex;<span class="comment">//用于对读写进程互斥的访问</span></span><br><span class="line"><span class="type">sem_t</span> mutex;<span class="comment">//用于对read_count变量同步互斥的访问</span></span><br><span class="line"><span class="type">int</span> read_count=<span class="number">0</span>;</span><br><span class="line"> </span><br><span class="line"><span class="type">void</span>* <span class="title function_">reading</span><span class="params">(<span class="type">void</span>* arg)</span></span><br><span class="line">&#123;</span><br><span class="line">  sem_wait(&amp;mutex);<span class="comment">//对临界资源read_count进行上锁</span></span><br><span class="line">  read_count++;</span><br><span class="line">  <span class="keyword">if</span> (read_count==<span class="number">1</span>)<span class="comment">//第一个读者拿到锁后，其他读者可以直接进入</span></span><br><span class="line">   sem_wait(&amp;rw_mutex);</span><br><span class="line">  sem_post(&amp;mutex);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%d号读者正在读取数据！\n&quot;</span>,*(<span class="type">int</span>*)arg);</span><br><span class="line">  sem_wait(&amp;mutex);</span><br><span class="line">  read_count--;</span><br><span class="line">  <span class="keyword">if</span>(read_count==<span class="number">0</span>)<span class="comment">//最后一个读者释放锁</span></span><br><span class="line">   sem_post(&amp;rw_mutex);</span><br><span class="line">  sem_post(&amp;mutex);</span><br><span class="line">  pthread_exit(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="type">void</span>* <span class="title function_">writing</span><span class="params">(<span class="type">void</span>* arg)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">   sem_wait(&amp;rw_mutex);<span class="comment">//争夺互斥量，与读进程进行互斥的访问</span></span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;正在写入数据！\n&quot;</span>);</span><br><span class="line">   sem_post(&amp;rw_mutex);</span><br><span class="line">   sleep(<span class="number">2</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> i,reader_id[<span class="number">5</span>]=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;<span class="comment">//定义读者编号</span></span><br><span class="line">  sem_init(&amp;rw_mutex,<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line">  sem_init(&amp;mutex,<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line">  <span class="type">pthread_t</span> reader[<span class="number">5</span>],writer;</span><br><span class="line">  <span class="comment">//创建写者线程</span></span><br><span class="line">  pthread_create(&amp;writer,<span class="literal">NULL</span>,(<span class="type">void</span>*)&amp;writing,<span class="literal">NULL</span>);</span><br><span class="line">  <span class="comment">//创建5个读者线程</span></span><br><span class="line">  <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">  &#123;</span><br><span class="line">   pthread_create(reader+i,<span class="literal">NULL</span>,(<span class="type">void</span>*)&amp;reading,&amp;reader_id[i]);</span><br><span class="line">   sleep(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//等待读者线程结束，写线程中有while循环，不用等待它结束</span></span><br><span class="line">  <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">  &#123;</span><br><span class="line">   pthread_join(reader[i],<span class="literal">NULL</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  sem_destroy(&amp;rw_mutex);</span><br><span class="line">  sem_destroy(&amp;mutex);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="编译后执行："><a href="#编译后执行：" class="headerlink" title="编译后执行："></a>编译后执行：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image010.jpg" alt="img"> </p>
+<h5 id="运行结果：-1"><a href="#运行结果：-1" class="headerlink" title="运行结果："></a>运行结果：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image012.jpg" alt="img"> </p>
+<h3 id="3-3-2-信号量同步互斥关键代码说明"><a href="#3-3-2-信号量同步互斥关键代码说明" class="headerlink" title="3.3.2 信号量同步互斥关键代码说明"></a>3.3.2 信号量同步互斥关键代码说明</h3><p>（1）对读者线程，首先对read_count临界资源上锁，并将读者数量加1，如果是第一个读者拿到锁，那么其他读者不再需要与写者进行争夺锁便可以读取数据。</p>
+<p>当剩最后一个读者时，读完数据后将读&#x2F;写进程锁释放。*(int*)arg为线程(读者)编号。</p>
+<p>  sem_wait(&amp;mutex);</p>
+<p>  read_count++;</p>
+<p>  if (read_count&#x3D;&#x3D;1) </p>
+<p>   sem_wait(&amp;rw_mutex);</p>
+<p>  sem_post(&amp;mutex);</p>
+<p>  printf(“%d号读者正在读取数据！\n”,<em>(int</em>)arg);</p>
+<p>  sem_wait(&amp;mutex);</p>
+<p>  read_count–;</p>
+<p>  if(read_count&#x3D;&#x3D;0)</p>
+<p>   sem_post(&amp;rw_mutex);</p>
+<p>  sem_post(&amp;mutex);</p>
+<p>（2）写者进程通过while循环一直进行写操作,争躲到读&#x2F;写进程锁就可以进行数据写入</p>
+<p>​	while(1)</p>
+<p>​	{</p>
+<p>​	 sem_wait(&amp;rw_mutex);</p>
+<p>​	 printf(“正在写入数据！\n”);</p>
+<p>​	sem_post(&amp;rw_mutex);</p>
+<p>​	}</p>
+<p>（3）sem_post( ) 函数（函数原型 int sem_wait(sem_t * sem);）<br>     作用是给信号量的值加上一个“1”。 当有线程阻塞在这个信号量上时，调用这个函数会使其中一个线程不在阻塞，选择机制是有线程的调度策略决定的。</p>
+<p>​	sem_wait ( ) 函数（函数原型 int sem_wait(sem_t * sem);）<br>它的作用是从信号量的值减去一个“1”，但它永远会先等待该信号量为一个非零值才开始做减法。</p>
+<h2 id="3-4屏障同步互斥方法实现"><a href="#3-4屏障同步互斥方法实现" class="headerlink" title="3.4屏障同步互斥方法实现"></a>3.4屏障同步互斥方法实现</h2><h3 id="3-4-1-屏障同步互斥示例代码"><a href="#3-4-1-屏障同步互斥示例代码" class="headerlink" title="3.4.1 屏障同步互斥示例代码"></a>3.4.1 屏障同步互斥示例代码</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> N 7 </span></span><br><span class="line"><span class="type">pthread_barrier_t</span> barrier;<span class="comment">//定义屏障</span></span><br><span class="line"><span class="type">double</span> ave;<span class="comment">//平均分</span></span><br><span class="line"><span class="type">int</span> min,max;<span class="comment">//最低分和最高分</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//计算去掉最低分和最高分之后的平均分</span></span><br><span class="line"><span class="type">void</span>* <span class="title function_">average</span><span class="params">(<span class="type">int</span> *arg)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> i,sum=<span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;N;i++)</span><br><span class="line">  &#123;</span><br><span class="line">   sum+=arg[i];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/*等待两个子线程找出最低分和最高分后，然后再来求平均分*/</span></span><br><span class="line">  pthread_barrier_wait(&amp;barrier);<span class="comment">//到达屏障点,停止等待</span></span><br><span class="line">  <span class="comment">/*等所有线程到达屏障点后,继续运行求出平均值在主线程中输出*/</span></span><br><span class="line">  ave=(sum-min-max)/(N<span class="number">-2.0</span>);</span><br><span class="line">  pthread_exit(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//找到最低分</span></span><br><span class="line"><span class="type">void</span>* <span class="title function_">mininum</span><span class="params">(<span class="type">int</span> *arg)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> i,j;</span><br><span class="line">  min=arg[<span class="number">0</span>];</span><br><span class="line">  <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;N;i++)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="keyword">if</span>(arg[i]&lt;min)</span><br><span class="line">   &#123;</span><br><span class="line">      min=arg[i];</span><br><span class="line">   &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;The mininum value is %d\n&quot;</span>,min);</span><br><span class="line">  pthread_barrier_wait(&amp;barrier);<span class="comment">//到达屏障点,停止等待</span></span><br><span class="line">  pthread_exit(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//找到最高分</span></span><br><span class="line"><span class="type">void</span>* <span class="title function_">maxinum</span><span class="params">(<span class="type">int</span> *arg)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> i,j;</span><br><span class="line">  max=arg[<span class="number">0</span>];</span><br><span class="line">  <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;N;i++)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="keyword">if</span>(arg[i]&gt;max)</span><br><span class="line">   &#123;</span><br><span class="line">      max=arg[i];</span><br><span class="line">   &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;The maxinum value is %d\n&quot;</span>,max);</span><br><span class="line">  pthread_barrier_wait(&amp;barrier);<span class="comment">//到达屏障点,停止等待</span></span><br><span class="line">  pthread_exit(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">if</span>(argc!=<span class="number">8</span>)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;请输入%d个数值\n&quot;</span>,N);</span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">int</span> i,<span class="built_in">array</span>[N];</span><br><span class="line">  <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;N;i++)<span class="comment">//将命令行输入的参数存入数组中</span></span><br><span class="line">  &#123;</span><br><span class="line">   <span class="built_in">array</span>[i]=atoi(argv[i+<span class="number">1</span>]);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">pthread_t</span> tid1,tid2,tid3;</span><br><span class="line">  <span class="comment">/*初始化屏障，设置需到达屏障的数目为3(3个子线程)*/</span></span><br><span class="line">  pthread_barrier_init(&amp;barrier,<span class="literal">NULL</span>,<span class="number">4</span>);</span><br><span class="line">  pthread_create(&amp;tid1,<span class="literal">NULL</span>,(<span class="type">void</span>*)&amp;average,<span class="built_in">array</span>);</span><br><span class="line">  pthread_create(&amp;tid2,<span class="literal">NULL</span>,(<span class="type">void</span>*)&amp;maxinum,<span class="built_in">array</span>);</span><br><span class="line">  pthread_create(&amp;tid3,<span class="literal">NULL</span>,(<span class="type">void</span>*)&amp;mininum,<span class="built_in">array</span>);</span><br><span class="line">  pthread_join(tid1,<span class="literal">NULL</span>);<span class="comment">//等待tid1线程求出平均值，以免主线程先结束</span></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;The final score is %.1f\n&quot;</span>,ave);</span><br><span class="line">  pthread_barrier_destroy(&amp;barrier);<span class="comment">//释放屏障资源</span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="编译代码："><a href="#编译代码：" class="headerlink" title="编译代码："></a>编译代码：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image014.jpg" alt="img"> </p>
+<h5 id="运行结果：-2"><a href="#运行结果：-2" class="headerlink" title="运行结果："></a>运行结果：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image016.jpg" alt="img"> </p>
+<h3 id="3-4-2-屏障同步互斥关键代码说明"><a href="#3-4-2-屏障同步互斥关键代码说明" class="headerlink" title="3.4.2 屏障同步互斥关键代码说明"></a>3.4.2 屏障同步互斥关键代码说明</h3><p> （1）对于求平均分线程，要等待两个子线程找出最低分和最高分后，才能求最后的得分。</p>
+<p>通过设置屏障，等待其他线程到达该点后，继续并发执行求出最后的平均分ave。最后在主线程中输出平均分。</p>
+<p>​	for(i&#x3D;0;i&lt;N;i++)</p>
+<p>​	  {</p>
+<p>​		sum+&#x3D;arg[i];</p>
+<pre><code> &#125;
+</code></pre>
+<p>​	 pthread_barrier_wait(&amp;barrier);&#x2F;&#x2F;到达屏障点,停止等待 </p>
+<p>​	 ave&#x3D;(sum-min-max)&#x2F;(N-2.0);</p>
+<p>(2)对于另外两个子线程，当求出最大值和最小值后，表明自己的工作已经完成。并输出最大值和最小值。</p>
+<p>​	 printf(“The maxinum value is %d\n”,max);</p>
+<p>​	 pthread_barrier_wait(&amp;barrier);</p>
+<p>​	 printf(“The maxinum value is %d\n”,max);</p>
+<p>​	 pthread_barrier_wait(&amp;barrier);</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" title="进程的同步互斥和进程间通信" target="_blank" rel="external">https://yellowsy.github.io/2022/09/15/进程的同步互斥和进程间通信/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/cofess" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/cofess" target="_blank"><span class="text-dark">星星失眠啦</span><small class="ml-1x">梅花何止落满一座南山</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2022/09/14/Web%E9%9D%99%E6%80%81%E7%BD%91%E9%A1%B5/" title="Web静态网页"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://yellowsy.github.io" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'eIXRducHUfReL3Gn6x0ZII3L-gzGzoHsz',
+    appKey: 'iCUH9VsNoDhBVwh1lySPt1GF',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: true
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

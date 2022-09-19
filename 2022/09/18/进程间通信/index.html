@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>进程间通信 | 月亮十六便士</title>
+  <meta name="description" content="一、   进程间通信机制说明linux下多个进程间的通信机制叫做IPC，它是多个进程之间相互沟通的一种方法。在linux下有多种进程间通信的方法：半双工管道、命名管道、消息队列、信号、信号量、共享内存、内存映射文件，套接字等等。 二、   进程间通信方法说明2.1 半双工管道方法说明（1）管道实际是用于进程间通信的一段共享内存，创建管道的进程称为管道服务器，连接到一个管道的进程为管道客户机。一个进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="进程间通信">
+<meta property="og:url" content="https://yellowsy.github.io/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/index.html">
+<meta property="og:site_name" content="紫薯与你">
+<meta property="og:description" content="一、   进程间通信机制说明linux下多个进程间的通信机制叫做IPC，它是多个进程之间相互沟通的一种方法。在linux下有多种进程间通信的方法：半双工管道、命名管道、消息队列、信号、信号量、共享内存、内存映射文件，套接字等等。 二、   进程间通信方法说明2.1 半双工管道方法说明（1）管道实际是用于进程间通信的一段共享内存，创建管道的进程称为管道服务器，连接到一个管道的进程为管道客户机。一个进">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image002.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image004.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image006.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image008.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image010.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image012.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image014.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image016.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image018.jpg">
+<meta property="article:published_time" content="2022-09-18T14:26:04.000Z">
+<meta property="article:modified_time" content="2022-09-18T14:51:10.049Z">
+<meta property="article:author" content="Huang_SY">
+<meta property="article:tag" content="程序员">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yellowsy.github.io/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image002.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://yellowsy.github.io/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="紫薯与你" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://yellowsy.github.io" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">星星失眠啦</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">梅花何止落满一座南山</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Wuhan, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://yellowsy.github.io" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML/">HTML</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%96%87%E6%A1%88/">文案</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/" rel="tag">程序员</a><span class="tag-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 13px;">生活</a> <a href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/" style="font-size: 14px;">程序员</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/18/Windows-XP%E9%A9%B1%E5%8A%A8%E7%BC%96%E7%A8%8B/" class="title">Windows XP驱动编程</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-18T14:58:59.000Z" itemprop="datePublished">2022-09-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" class="title">进程间通信</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-18T14:26:04.000Z" itemprop="datePublished">2022-09-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/18/Typora%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E5%88%B0%E5%8D%9A%E5%AE%A2/" class="title">Typora图片上传到博客</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-18T06:55:06.000Z" itemprop="datePublished">2022-09-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/" class="title">进程的同步互斥</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-14T16:28:12.000Z" itemprop="datePublished">2022-09-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/HTML/">HTML</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/14/Web%E9%9D%99%E6%80%81%E7%BD%91%E9%A1%B5/" class="title">Web静态网页</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-14T09:46:03.000Z" itemprop="datePublished">2022-09-14</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-进程间通信" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      进程间通信
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" class="article-date">
+	  <time datetime="2022-09-18T14:26:04.000Z" itemprop="datePublished">2022-09-18</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/" rel="tag">程序员</a>
+  </span>
+
+
+        
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" class="leancloud_visitors"  data-flag-title="进程间通信">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.9k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 12(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="一、-进程间通信机制说明"><a href="#一、-进程间通信机制说明" class="headerlink" title="一、   进程间通信机制说明"></a>一、   进程间通信机制说明</h1><p>linux下多个进程间的通信机制叫做IPC，它是多个进程之间相互沟通的一种方法。在linux下有多种进程间通信的方法：半双工管道、命名管道、消息队列、信号、信号量、共享内存、内存映射文件，套接字等等。</p>
+<h1 id="二、-进程间通信方法说明"><a href="#二、-进程间通信方法说明" class="headerlink" title="二、   进程间通信方法说明"></a>二、   进程间通信方法说明</h1><h2 id="2-1-半双工管道方法说明"><a href="#2-1-半双工管道方法说明" class="headerlink" title="2.1 半双工管道方法说明"></a>2.1 半双工管道方法说明</h2><p>（1）管道实际是用于进程间通信的一段共享内存，创建管道的进程称为管道服务器，连接到一个管道的进程为管道客户机。一个进程在向管道写入数据后，另一进程就可以从管道的另一端将其读取出来。管道只能在具有公共祖先的两个进程之间使用。通常，一个管道由一个进程创建，在进程调用fork后，这个管道就能在父子进程间使用了。</p>
+<p>（2）管道通过pipe(int fd[2])函数创建，参数fd[0]为读而打开，fd[1]为写而打开。fd[1]的输出是fd[0]的输入。简单来说，当父进程打开fd[1]关闭fd[0],就可以向管道写入文件，而子进程打开fd[0]关闭fd[1],可以从管道中读取文件。</p>
+<h2 id="2-2-命名管道方法说明"><a href="#2-2-命名管道方法说明" class="headerlink" title="2.2 命名管道方法说明"></a>2.2 命名管道方法说明</h2><p>命名管道又称FIFO,它是一种特殊类型的文件，它在系统中以文件形式存在。未命名的管道只能在两个相关的进程之间使用，而且这两个相关的进程还要有一个共同的创建了它们的祖先进程。但是，通过FIFO,不相关的进程也能交换数据。我们可以使用mkfifo或者mkfifoat创建FIFO,然后用opne来打开它。如果命名管道FIFO打开时设置了读权限，则读进程将一直阻塞，一直到其他进程打开该FIFO并向管道写入数据。</p>
+<h2 id="2-3-消息队列方法说明"><a href="#2-3-消息队列方法说明" class="headerlink" title="2.3 消息队列方法说明"></a>2.3 消息队列方法说明</h2><p>消息队列是消息的链接表，储存在内核中，由消息队列标识符标识。用户进程可以向消息队列添加消息，也可以向消息队列读取消息。 msgget创建一个新队列或打开一个存在的队列；msgsnd向队列末端添加一条新消息；msgrcv从队列中取消息， 取消息是不一定遵循先进先出的， 也可以按消息的类型字段取消息。</p>
+<h2 id="2-4-共享储存方法说明"><a href="#2-4-共享储存方法说明" class="headerlink" title="2.4 共享储存方法说明"></a>2.4 共享储存方法说明</h2><p>共享内存允许两个或多个进程共享一个给定的存储区，这一段存储区可以被两个或两个以上的进程映射至自身的地址空间中，一个进程写入共享内存的信息，可以被其他使用这个共享内存的进程，通过内存读读出其中的消息内容，从而实现了进程间的通信。通过shmget创建一个共享内存段，并获得一个进程标识符。然后通过shmat将其连接到它的地址空间，shmat的返回值是该段所连接的实际地址。可以通过指针指向该地址对其中内容进行操作。</p>
+<h1 id="三、-同步互斥方法实现"><a href="#三、-同步互斥方法实现" class="headerlink" title="三、   同步互斥方法实现"></a>三、   同步互斥方法实现</h1><h2 id="3-1-半双工管道方法实现"><a href="#3-1-半双工管道方法实现" class="headerlink" title="3.1 半双工管道方法实现"></a>3.1 半双工管道方法实现</h2><h3 id="3-1-1-半双工管道示例代码"><a href="#3-1-1-半双工管道示例代码" class="headerlink" title="3.1.1 半双工管道示例代码"></a>3.1.1 半双工管道示例代码</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BUFFER_SIZE 25</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> READ_END 0</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> WRITE_END 1</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> write_msg[BUFFER_SIZE]=<span class="string">&quot;Greetings\n&quot;</span>;<span class="comment">//要写入的信息</span></span><br><span class="line">  <span class="type">char</span> read_msg[BUFFER_SIZE];<span class="comment">//存放读取文件</span></span><br><span class="line">  <span class="type">int</span> fd[<span class="number">2</span>];</span><br><span class="line">  <span class="type">pid_t</span> pid;</span><br><span class="line">  <span class="keyword">if</span>(pipe(fd)==<span class="number">-1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">&quot;Pipe failed&quot;</span>);</span><br><span class="line">   <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  pid=fork();</span><br><span class="line">  <span class="keyword">if</span>(pid&lt;<span class="number">0</span>)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">&quot;Fork failed&quot;</span>);</span><br><span class="line">   <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>(pid&gt;<span class="number">0</span>)<span class="comment">//父进程，向管道写入信息</span></span><br><span class="line">  &#123;</span><br><span class="line">   close(fd[READ_END]);<span class="comment">//关闭读出端</span></span><br><span class="line">   <span class="comment">/*从write_msg中写入数据到fd[WRUTE_END]中，并指定写入数据长度*/</span></span><br><span class="line">   write(fd[WRITE_END],write_msg,<span class="built_in">strlen</span>(write_msg)+<span class="number">1</span>);</span><br><span class="line">   close(fd[WRITE_END]);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span><span class="comment">//子进程，向管道读取信息</span></span><br><span class="line">  &#123;</span><br><span class="line">   close(fd[WRITE_END]); <span class="comment">//关闭写入端</span></span><br><span class="line">   <span class="comment">/*从fd[READ_END]中读取数据到read_msg中*/</span></span><br><span class="line">   read(fd[READ_END],read_msg,BUFFER_SIZE);</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;read:%s&quot;</span>,read_msg);</span><br><span class="line">   close(fd[READ_END]);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译及运行结果：</p>
+<p><img src="/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image002.jpg" alt="img"> </p>
+<h3 id="3-1-2半双工管道关键代码说明"><a href="#3-1-2半双工管道关键代码说明" class="headerlink" title="3.1.2半双工管道关键代码说明"></a>3.1.2半双工管道关键代码说明</h3><p>（1）父进程关闭读出端，通过write函数从write_msg中写入数据到fd[WRUTE_END]中</p>
+<p>close(fd[READ_END]);  </p>
+<p>write(fd[WRITE_END],write_msg,strlen(write_msg)+1);</p>
+<p>（2）子进程关闭写入端，通过read函数从fd[READ_END]中读取数据到read_msg中，然后输出到标标准输出。</p>
+<p>close(fd[WRITE_END]);</p>
+<p>read(fd[READ_END],read_msg,BUFFER_SIZE);</p>
+<h2 id="3-2-命名管道方法实现"><a href="#3-2-命名管道方法实现" class="headerlink" title="3.2 命名管道方法实现"></a>3.2 命名管道方法实现</h2><h3 id="3-2-1-命名管道示例代码"><a href="#3-2-1-命名管道示例代码" class="headerlink" title="3.2.1 命名管道示例代码"></a>3.2.1 命名管道示例代码</h3><h5 id="服务端代码："><a href="#服务端代码：" class="headerlink" title="服务端代码："></a>服务端代码：</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;linux/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FIFO_FILE <span class="string">&quot;MYFIFO&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  FILE *fp;<span class="comment">//文件指针</span></span><br><span class="line">  <span class="type">char</span> readbuf[<span class="number">80</span>];</span><br><span class="line">  <span class="comment">/*创建命名管道MYFIFO*/</span></span><br><span class="line">  mkfifo(<span class="string">&quot;MYFIFO&quot;</span>,S_IWUSR|S_IRUSR|S_IRGRP|S_IROTH);</span><br><span class="line">  <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="comment">/*打开命名管道*/</span></span><br><span class="line">   <span class="keyword">if</span>((fp=fopen(FIFO_FILE,<span class="string">&quot;r&quot;</span>))==<span class="literal">NULL</span>)</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;open fifo failed\n&quot;</span>);</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">/*从命名管道中读取数据*/</span></span><br><span class="line">   <span class="keyword">if</span>(fgets(readbuf,<span class="number">80</span>,fp)!=<span class="literal">NULL</span>)</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;Received string : %s\n&quot;</span>,readbuf);</span><br><span class="line">      fclose(fp);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">else</span></span><br><span class="line">   &#123;</span><br><span class="line">      <span class="keyword">if</span>(ferror(fp))</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;read fifo failed\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="客户端代码："><a href="#客户端代码：" class="headerlink" title="客户端代码："></a>客户端代码：</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FIFO_FILE <span class="string">&quot;MYFIFO&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">  FILE *fp;</span><br><span class="line">  <span class="type">int</span> i;</span><br><span class="line">  <span class="keyword">if</span>(argc&lt;=<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;usage : %s &lt;pathname&gt;\n&quot;</span>,argv[<span class="number">0</span>]);</span><br><span class="line">   <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>((fp=fopen(FIFO_FILE,<span class="string">&quot;w&quot;</span>))==<span class="literal">NULL</span>)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;open fifo failed\n&quot;</span>);</span><br><span class="line">   <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;argc;i++)<span class="comment">//读取命名行参数作为输入数据</span></span><br><span class="line">  &#123;</span><br><span class="line">   <span class="keyword">if</span>(<span class="built_in">fputs</span>(argv[i],fp)==EOF)</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;write fifo error\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span>(<span class="built_in">fputs</span>(<span class="string">&quot; &quot;</span>,fp)==EOF)</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;write fifo error\n&quot;</span>);</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">   &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  fclose(fp);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>首先启动客户端，进入阻塞状态等待客户端的输入。</li>
+</ul>
+<p><img src="/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image004.jpg" alt="img"> </p>
+<ul>
+<li>然后启动客户端，写入数据到管道中。</li>
+</ul>
+<p><img src="/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image006.jpg" alt="img"> </p>
+<ul>
+<li>服务端从中读取数据，显示到屏幕。</li>
+</ul>
+<p><img src="/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image008.jpg" alt="img"> </p>
+<h3 id="3-2-2-命名管道关键代码说明"><a href="#3-2-2-命名管道关键代码说明" class="headerlink" title="3.2.2 命名管道关键代码说明"></a>3.2.2 命名管道关键代码说明</h3><p>(1)创建一个命名管道：</p>
+<p>mkfifo(“MYFIFO”,S_IWUSR|S_IRUSR|S_IRGRP|S_IROTH);</p>
+<p>参数  S_IWUSR：用户写权限</p>
+<p>​     S_IRUSR：用户读权限</p>
+<p>​     S_IRGRP：用户组读权限</p>
+<p>​     S_IROTH：其他组读权限</p>
+<p>（2）服务端：</p>
+<p>fp指向以可读形式打开的管道文件，并从中读取数据到readbuf中，然后显示到屏幕。</p>
+<p>fp&#x3D;fopen(FIFO_FILE,”r”)</p>
+<p>fgets(readbuf,80,fp)</p>
+<p>（3）客户端：</p>
+<p>fp指向以可写形式打开的管道文件，并将命令行参数写入到管道文件中，以便服务端读取。</p>
+<p>fp&#x3D;fopen(FIFO_FILE,”w”)</p>
+<p>for(i&#x3D;1;i&lt;argc;i++)</p>
+<p>  fputs(argv[i],fp；</p>
+<h2 id="3-3-消息队列方法实现"><a href="#3-3-消息队列方法实现" class="headerlink" title="3.3 消息队列方法实现"></a>3.3 消息队列方法实现</h2><h3 id="3-3-1-消息队列示例代码"><a href="#3-3-1-消息队列示例代码" class="headerlink" title="3.3.1 消息队列示例代码"></a>3.3.1 消息队列示例代码</h3><h5 id="发送消息代码："><a href="#发送消息代码：" class="headerlink" title="发送消息代码："></a>发送消息代码：</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/ipc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/msg.h&gt;</span> </span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">my_msg</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="type">long</span> <span class="type">int</span> my_msg_type;</span><br><span class="line">  <span class="type">char</span> text[BUFSIZ];</span><br><span class="line">&#125;msgbuf;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> running=<span class="number">1</span>;</span><br><span class="line">  <span class="type">int</span> msgid;</span><br><span class="line">  <span class="type">long</span> <span class="type">int</span> msg_to_receive=<span class="number">0</span>;</span><br><span class="line">  msgid=msgget((<span class="type">key_t</span>)<span class="number">1028</span>,<span class="number">0666</span>|IPC_CREAT);<span class="comment">//创建引用标识符为1028的消息队列</span></span><br><span class="line">  <span class="keyword">if</span>(msgid==<span class="number">-1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;magget failed\n&quot;</span>);</span><br><span class="line">   <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">while</span>(running)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;请输入你想写的信息：&quot;</span>);</span><br><span class="line">   fflush(<span class="built_in">stdin</span>);<span class="comment">//过滤掉最后的enter(换行符)</span></span><br><span class="line">   fgets(msgbuf.text,BUFSIZ,<span class="built_in">stdin</span>);</span><br><span class="line">   msgbuf.my_msg_type=<span class="number">1</span>;</span><br><span class="line">   <span class="comment">/*发送消息;第二个参数是一个指向长整数的指针，其后紧接着的是消息数据*/</span></span><br><span class="line">   <span class="keyword">if</span>(msgsnd(msgid,(<span class="type">void</span>*)&amp;msgbuf,BUFSIZ,<span class="number">0</span>)==<span class="number">-1</span>)</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;magsnd failed\n&quot;</span>);</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span>(<span class="built_in">strncmp</span>(msgbuf.text,<span class="string">&quot;end&quot;</span>,<span class="number">3</span>)==<span class="number">0</span>)</span><br><span class="line">      running=<span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="接收消息代码："><a href="#接收消息代码：" class="headerlink" title="接收消息代码："></a>接收消息代码：</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/ipc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/msg.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">my_msg</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="type">long</span> <span class="type">int</span> my_msg_type;</span><br><span class="line">  <span class="type">char</span> text[BUFSIZ];</span><br><span class="line">&#125;msgbuf;</span><br><span class="line"> </span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> running=<span class="number">1</span>;</span><br><span class="line">  <span class="type">int</span> msgid;</span><br><span class="line">  <span class="type">long</span> <span class="type">int</span> msg_to_receive=<span class="number">0</span>;</span><br><span class="line">  msgid=msgget((<span class="type">key_t</span>)<span class="number">1028</span>,<span class="number">0666</span>|IPC_CREAT);<span class="comment">//创建我们想打开的的消息队列</span></span><br><span class="line">  <span class="keyword">if</span>(msgid==<span class="number">-1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;magget failed\n&quot;</span>);</span><br><span class="line">   <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">while</span>(running)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="comment">/*接受消息，将它赋值到结构体的地址空间*/</span></span><br><span class="line">   <span class="keyword">if</span>(msgrcv(msgid,(<span class="type">void</span>*)&amp;msgbuf,BUFSIZ,msg_to_receive,<span class="number">0</span>)==<span class="number">-1</span>)</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;magrcv failed\n&quot;</span>);</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;你写入信息是：%s&quot;</span>,msgbuf.text);</span><br><span class="line">   <span class="comment">/*比较两个字符串，指定长度为3; 即输入end就结束*/</span></span><br><span class="line">   <span class="keyword">if</span>(<span class="built_in">strncmp</span>(msgbuf.text,<span class="string">&quot;end&quot;</span>,<span class="number">3</span>)==<span class="number">0</span>)</span><br><span class="line">      running=<span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/*msgctl删除队列(cmd参数指定为IPC_RMID)*/</span></span><br><span class="line">  <span class="keyword">if</span>(msgctl(msgid,IPC_RMID,<span class="number">0</span>)==<span class="number">-1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;msgct(IPC_RMID) failed\n&quot;</span>);</span><br><span class="line">   <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：发送方发送消息（不需要先运行接受方程序）</p>
+<p><img src="/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image010.jpg" alt="img"> </p>
+<p>接收方接收消息：</p>
+<p><img src="/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image012.jpg" alt="img"> </p>
+<h3 id="3-3-2-消息队列关键代码说明"><a href="#3-3-2-消息队列关键代码说明" class="headerlink" title="3.3.2 消息队列关键代码说明"></a>3.3.2 消息队列关键代码说明</h3><p>（1）创建消息队列：msgid&#x3D;msgget((key_t)1028,0666|IPC_CREAT)</p>
+<p>(2) 用户从键盘输入数据，并将数据放到消息队列中：</p>
+<p>fgets(msgbuf.text,BUFSIZ,stdin);</p>
+<p>msgsnd(msgid,(void*)&amp;msgbuf,BUFSIZ,0)</p>
+<p>（3）从队列中取用消息，将它赋值到结构体的地址空间：</p>
+<p>msgrcv(msgid,(void*)&amp;msgbuf,BUFSIZ,msg_to_receive,0)</p>
+<p>第四个参数type即msg_to_receive指定想要哪一种消息。</p>
+<p>type&#x3D;&#x3D;0返回队列中的第一个消息</p>
+<p>type&gt;0返回队列中的消息类型为type的第一个消息</p>
+<p>tyoe&lt;0返回队列中消息类型值小于等于绝对值的消息，如果消息有若干个，则取类型值最小的消息</p>
+<h2 id="3-4-共享储存方法实现"><a href="#3-4-共享储存方法实现" class="headerlink" title="3.4 共享储存方法实现"></a>3.4 共享储存方法实现</h2><h3 id="3-4-1-共享储存示例代码"><a href="#3-4-1-共享储存示例代码" class="headerlink" title="3.4.1 共享储存示例代码"></a>3.4.1 共享储存示例代码</h3><h5 id="服务进程："><a href="#服务进程：" class="headerlink" title="服务进程："></a>服务进程：</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/ipc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/shm.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> shmid;</span><br><span class="line">  <span class="type">char</span> c;</span><br><span class="line">  <span class="type">char</span> *shmptr,*s;</span><br><span class="line">  <span class="comment">/*创建一个名为&quot;1234&quot;的共享内存,返回值为共享内存的进程标识符*/</span></span><br><span class="line">  <span class="keyword">if</span>((shmid=shmget(<span class="number">1234</span>,<span class="number">256</span>,IPC_CREAT|<span class="number">0666</span>))&lt;<span class="number">0</span>)&#123;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;shmget failed\n&quot;</span>);</span><br><span class="line">   <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/*将共享内存附加到自己的地址空间上*/</span></span><br><span class="line">  <span class="keyword">if</span>((shmptr=shmat(shmid,<span class="number">0</span>,<span class="number">0</span>))==(<span class="type">void</span>*)<span class="number">-1</span>)</span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">/*指定参数IPC_RMID，用于删除共享内存*/</span></span><br><span class="line">   shmctl(shmid,IPC_RMID,(<span class="type">void</span>*)shmptr);</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;shmat failed\n&quot;</span>);</span><br><span class="line">   <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  s=shmptr;</span><br><span class="line">  <span class="keyword">for</span>(c=<span class="string">&#x27;a&#x27;</span>;c&lt;=<span class="string">&#x27;z&#x27;</span>;c++)</span><br><span class="line">  &#123;</span><br><span class="line">   *s++=c;</span><br><span class="line">  &#125;</span><br><span class="line">  *s=<span class="literal">NULL</span>;</span><br><span class="line">  <span class="keyword">while</span>(*shmptr!=<span class="string">&#x27;*&#x27;</span>)<span class="comment">//等待客户端读完数据</span></span><br><span class="line">   sleep(<span class="number">1</span>);</span><br><span class="line">  shmctl(shmid,IPC_RMID,(<span class="type">void</span>*)shmptr);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="客户进程："><a href="#客户进程：" class="headerlink" title="客户进程："></a>客户进程：</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/ipc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/shm.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span> </span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> shmid;</span><br><span class="line">  <span class="type">char</span> c;</span><br><span class="line">  <span class="type">char</span> *shmptr,*s;</span><br><span class="line">  <span class="keyword">if</span>((shmid=shmget(<span class="number">1234</span>,<span class="number">256</span>,<span class="number">0666</span>))&lt;<span class="number">0</span>)</span><br><span class="line">  &#123;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;shmget failed\n&quot;</span>);</span><br><span class="line">   <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>((shmptr=shmat(shmid,<span class="number">0</span>,<span class="number">0</span>))==(<span class="type">void</span>*)<span class="number">-1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">   shmctl(shmid,IPC_RMID,(<span class="type">void</span>*)shmptr);</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;shmat failed\n&quot;</span>);</span><br><span class="line">   <span class="built_in">exit</span>(<span class="number">2</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span>(s=shmptr;*s!=<span class="literal">NULL</span>;s++)</span><br><span class="line">   <span class="built_in">putchar</span>(*s);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">  *shmptr=<span class="string">&#x27;*&#x27;</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>服务进程开启等待客户读取完数据：</p>
+<p><img src="/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image014.jpg" alt="img"> </p>
+<p>客户读取数据：</p>
+<p><img src="/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image016.jpg" alt="img"> </p>
+<p>客户读取完数据之后服务器进程关闭：</p>
+<p><img src="/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image018.jpg" alt="img"> </p>
+<h3 id="3-4-2-共享储存关键代码说明"><a href="#3-4-2-共享储存关键代码说明" class="headerlink" title="3.4.2 共享储存关键代码说明"></a>3.4.2 共享储存关键代码说明</h3><p>服务端进程：创建标识符为1234的共享内存，并用shmprt指向它返回的实际地址空间</p>
+<p>shmid&#x3D;shmget(1234,256,IPC_CREAT|0666)</p>
+<p>shmptr&#x3D;shmat(shmid,0,0)</p>
+<p>向其中写入数据后等待客户读取完数据并删除该共享内存段</p>
+<p>while(<em>shmptr!&#x3D;’</em>‘)&#x2F;&#x2F;等待客户端读完数据</p>
+<p>   sleep(1);</p>
+<p>shmctl(shmid,IPC_RMID,(void*)shmptr);</p>
+<p>客户端进程：打开该共享内存，并用shmprt指向它返回的实际地址空间</p>
+<p>shmid&#x3D;shmget(1234,256,0666)</p>
+<p>shmptr&#x3D;shmat(shmid,0,0)</p>
+<p>然后读取共享内存段里面的内容，并将共享内存里面的内容设置为’*’,告诉服务进程已经读取完毕</p>
+<p>for(s&#x3D;shmptr;*s!&#x3D;NULL;s++)</p>
+<p>   putchar(*s);</p>
+<p>   *shmptr&#x3D;’*‘;</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://yellowsy.github.io/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" title="进程间通信" target="_blank" rel="external">https://yellowsy.github.io/2022/09/18/进程间通信/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://yellowsy.github.io" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://yellowsy.github.io" target="_blank"><span class="text-dark">星星失眠啦</span><small class="ml-1x">梅花何止落满一座南山</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/09/18/Windows-XP%E9%A9%B1%E5%8A%A8%E7%BC%96%E7%A8%8B/" title="Windows XP驱动编程"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/09/18/Typora%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E5%88%B0%E5%8D%9A%E5%AE%A2/" title="Typora图片上传到博客"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://yellowsy.github.io" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'eIXRducHUfReL3Gn6x0ZII3L-gzGzoHsz',
+    appKey: 'iCUH9VsNoDhBVwh1lySPt1GF',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: true
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

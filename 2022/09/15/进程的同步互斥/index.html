@@ -17,30 +17,30 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>进程的同步互斥和进程间通信 | 月亮十六便士</title>
+  <title>进程的同步互斥 | 月亮十六便士</title>
   <meta name="description" content="一、   引起同步互斥问题的原因同步：因为一些任务不是有一个进程实现，而是通过多个进程共同实现，所以这些进程之间按照一定的规则，互相协调合作共同实现某一任务而进行同步。 互斥：因为在多个程序并发执行时，由于共享系统资源，对于临界资源，多个进程只能进行互斥的访问，即每次只能允许一个进程访问，所以这些进程对于该资源的访问就形成了相互制约的关系。 二、   同步互斥方法说明2.1 互斥锁同步互斥方法说明">
 <meta property="og:type" content="article">
-<meta property="og:title" content="进程的同步互斥和进程间通信">
-<meta property="og:url" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/index.html">
+<meta property="og:title" content="进程的同步互斥">
+<meta property="og:url" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/index.html">
 <meta property="og:site_name" content="紫薯与你">
 <meta property="og:description" content="一、   引起同步互斥问题的原因同步：因为一些任务不是有一个进程实现，而是通过多个进程共同实现，所以这些进程之间按照一定的规则，互相协调合作共同实现某一任务而进行同步。 互斥：因为在多个程序并发执行时，由于共享系统资源，对于临界资源，多个进程只能进行互斥的访问，即每次只能允许一个进程访问，所以这些进程对于该资源的访问就形成了相互制约的关系。 二、   同步互斥方法说明2.1 互斥锁同步互斥方法说明">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image002.jpg">
-<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image004.jpg">
-<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image006.jpg">
-<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image008.jpg">
-<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image010.jpg">
-<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image012.jpg">
-<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image014.jpg">
-<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image016.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image002.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image004.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image006.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image008.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image010.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image012.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image014.jpg">
+<meta property="og:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image016.jpg">
 <meta property="article:published_time" content="2022-09-14T16:28:12.000Z">
-<meta property="article:modified_time" content="2022-09-17T04:45:12.012Z">
+<meta property="article:modified_time" content="2022-09-18T14:29:32.992Z">
 <meta property="article:author" content="Huang_SY">
 <meta property="article:tag" content="程序员">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image002.jpg">
+<meta name="twitter:image" content="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image002.jpg">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/index.html">
+  <link rel="canonical" href="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/index.html">
   
     <link rel="alternate" href="/atom.xml" title="紫薯与你" type="application/atom+xml">
   
@@ -228,7 +228,7 @@
   <div class="widget">
     <h3 class="widget-title">分类</h3>
     <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML/">HTML</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%96%87%E6%A1%88/">文案</a><span class="category-list-count">1</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML/">HTML</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%96%87%E6%A1%88/">文案</a><span class="category-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -238,7 +238,7 @@
   <div class="widget">
     <h3 class="widget-title">标签</h3>
     <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/" rel="tag">程序员</a><span class="tag-list-count">3</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/" rel="tag">程序员</a><span class="tag-list-count">5</span></li></ul>
     </div>
   </div>
 
@@ -248,7 +248,7 @@
   <div class="widget">
     <h3 class="widget-title">标签云</h3>
     <div class="widget-body tagcloud">
-      <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 13px;">生活</a> <a href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/" style="font-size: 14px;">程序员</a>
+      <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 13px;">生活</a> <a href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/" style="font-size: 14px;">程序员</a>
     </div>
   </div>
 
@@ -257,7 +257,7 @@
   <div class="widget">
     <h3 class="widget-title">归档</h3>
     <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">4</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -276,7 +276,52 @@
                 <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
               </p>
               <p class="item-title">
-                <a href="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" class="title">进程的同步互斥和进程间通信</a>
+                <a href="/2022/09/18/Windows-XP%E9%A9%B1%E5%8A%A8%E7%BC%96%E7%A8%8B/" class="title">Windows XP驱动编程</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-18T14:58:59.000Z" itemprop="datePublished">2022-09-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/18/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" class="title">进程间通信</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-18T14:26:04.000Z" itemprop="datePublished">2022-09-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/18/Typora%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E5%88%B0%E5%8D%9A%E5%AE%A2/" class="title">Typora图片上传到博客</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-09-18T06:55:06.000Z" itemprop="datePublished">2022-09-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/" class="title">进程的同步互斥</a>
               </p>
               <p class="item-date">
                 <time datetime="2022-09-14T16:28:12.000Z" itemprop="datePublished">2022-09-15</time>
@@ -299,36 +344,6 @@
             </div>
           </li>
           
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Linux/">Linux</a>
-              </p>
-              <p class="item-title">
-                <a href="/2022/09/13/Linex%E5%91%BD%E4%BB%A4/" class="title">Linex命令</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-09-13T12:46:03.000Z" itemprop="datePublished">2022-09-13</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/%E6%96%87%E6%A1%88/">文案</a>
-              </p>
-              <p class="item-title">
-                <a href="/2022/09/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" class="title">适合发朋友圈的文案</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-09-12T12:19:21.000Z" itemprop="datePublished">2022-09-12</time>
-              </p>
-            </div>
-          </li>
-          
       </ul>
     </div>
   </div>
@@ -342,14 +357,14 @@
   
 <main class="main" role="main">
   <div class="content">
-  <article id="post-进程的同步互斥和进程间通信" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-进程的同步互斥" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      进程的同步互斥和进程间通信
+      进程的同步互斥
     </h1>
   
 
@@ -357,7 +372,7 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" class="article-date">
+	<a href="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/" class="article-date">
 	  <time datetime="2022-09-14T16:28:12.000Z" itemprop="datePublished">2022-09-15</time>
 	</a>
 </span>
@@ -378,12 +393,12 @@
 
 	<span class="article-read hidden-xs">
     	<i class="icon icon-eye-fill" aria-hidden="true"></i>
-    	<span id="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" class="leancloud_visitors"  data-flag-title="进程的同步互斥和进程间通信">
+    	<span id="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/" class="leancloud_visitors"  data-flag-title="进程的同步互斥">
 			<span class="leancloud-visitors-count">0</span>
 		</span>
     </span>
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/#comments" class="article-comment-link">评论</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/#comments" class="article-comment-link">评论</a></span>
         
 	
 		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3.6k(字)</span>
@@ -406,8 +421,8 @@
 
 
 
-<h5 id="编译后运行："><a href="#编译后运行：" class="headerlink" title="编译后运行："></a>编译后运行：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image002.jpg" alt="img"> </p>
-<h5 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image004.jpg" alt="img"> </p>
+<h5 id="编译后运行："><a href="#编译后运行：" class="headerlink" title="编译后运行："></a>编译后运行：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image002.jpg" alt="img"> </p>
+<h5 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image004.jpg" alt="img"> </p>
 <h3 id="3-1-2-互斥锁同步互斥关键代码说明"><a href="#3-1-2-互斥锁同步互斥关键代码说明" class="headerlink" title="3.1.2 互斥锁同步互斥关键代码说明"></a>3.1.2 互斥锁同步互斥关键代码说明</h3><p>（1）函数说明：</p>
 <p>​	pthread_mutex_inti(&amp;mutex,NULL); &#x2F;&#x2F;初始化互斥锁</p>
 <p>​	pthread_mutex_lock(&amp;mutex); &#x2F;&#x2F;上锁</p>
@@ -428,8 +443,8 @@
 
 
 
-<h5 id="编译并执行："><a href="#编译并执行：" class="headerlink" title="编译并执行："></a>编译并执行：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image006.jpg" alt="img"> </p>
-<h5 id="执行结果："><a href="#执行结果：" class="headerlink" title="执行结果："></a>执行结果：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image008.jpg" alt="img"> </p>
+<h5 id="编译并执行："><a href="#编译并执行：" class="headerlink" title="编译并执行："></a>编译并执行：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image006.jpg" alt="img"> </p>
+<h5 id="执行结果："><a href="#执行结果：" class="headerlink" title="执行结果："></a>执行结果：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image008.jpg" alt="img"> </p>
 <h3 id="3-2-2-条件变量同步互斥关键代码说明"><a href="#3-2-2-条件变量同步互斥关键代码说明" class="headerlink" title="3.2.2 条件变量同步互斥关键代码说明"></a>3.2.2 条件变量同步互斥关键代码说明</h3><p>（1）想吃饭的哲学家数量为临界资源，对其进行上锁</p>
 <p>​	pthread_mutex_lock(&amp;num);&#x2F;&#x2F;对临界资源上锁<br>​	philosopher_num–;<br>​	pthread_mutex_unlock(&amp;num);</p>
 <p>（2）哲学家进行吃饭时，通过pthread_mutex_lock(&amp;mutex)对哲学家访问筷子临界资源进行上锁。当拿不到左右筷子时进行等待。while循环是为了被唤醒后继续进行条件判断。当条件满足时wait()将线程阻塞后会释放互斥锁lock,以便其他进程能访问共享变量。别唤醒后进行上锁，以免其他线程进入。</p>
@@ -451,8 +466,8 @@
 
 
 
-<h5 id="编译后执行："><a href="#编译后执行：" class="headerlink" title="编译后执行："></a>编译后执行：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image010.jpg" alt="img"> </p>
-<h5 id="运行结果：-1"><a href="#运行结果：-1" class="headerlink" title="运行结果："></a>运行结果：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image012.jpg" alt="img"> </p>
+<h5 id="编译后执行："><a href="#编译后执行：" class="headerlink" title="编译后执行："></a>编译后执行：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image010.jpg" alt="img"> </p>
+<h5 id="运行结果：-1"><a href="#运行结果：-1" class="headerlink" title="运行结果："></a>运行结果：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image012.jpg" alt="img"> </p>
 <h3 id="3-3-2-信号量同步互斥关键代码说明"><a href="#3-3-2-信号量同步互斥关键代码说明" class="headerlink" title="3.3.2 信号量同步互斥关键代码说明"></a>3.3.2 信号量同步互斥关键代码说明</h3><p>（1）对读者线程，首先对read_count临界资源上锁，并将读者数量加1，如果是第一个读者拿到锁，那么其他读者不再需要与写者进行争夺锁便可以读取数据。</p>
 <p>当剩最后一个读者时，读完数据后将读&#x2F;写进程锁释放。*(int*)arg为线程(读者)编号。</p>
 <p>  sem_wait(&amp;mutex);</p>
@@ -479,8 +494,8 @@
 
 
 
-<h5 id="编译代码："><a href="#编译代码：" class="headerlink" title="编译代码："></a>编译代码：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image014.jpg" alt="img"> </p>
-<h5 id="运行结果：-2"><a href="#运行结果：-2" class="headerlink" title="运行结果："></a>运行结果：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/clip_image016.jpg" alt="img"> </p>
+<h5 id="编译代码："><a href="#编译代码：" class="headerlink" title="编译代码："></a>编译代码：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image014.jpg" alt="img"> </p>
+<h5 id="运行结果：-2"><a href="#运行结果：-2" class="headerlink" title="运行结果："></a>运行结果：</h5><p><img src="/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/clip_image016.jpg" alt="img"> </p>
 <h3 id="3-4-2-屏障同步互斥关键代码说明"><a href="#3-4-2-屏障同步互斥关键代码说明" class="headerlink" title="3.4.2 屏障同步互斥关键代码说明"></a>3.4.2 屏障同步互斥关键代码说明</h3><p> （1）对于求平均分线程，要等待两个子线程找出最低分和最高分后，才能求最后的得分。</p>
 <p>通过设置屏障，等待其他线程到达该点后，继续并发执行求出最后的平均分ave。最后在主线程中输出平均分。</p>
 <p>​	for(i&#x3D;0;i&lt;N;i++)</p>
@@ -504,7 +519,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5%E5%92%8C%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" title="进程的同步互斥和进程间通信" target="_blank" rel="external">https://yellowsy.github.io/2022/09/15/进程的同步互斥和进程间通信/</a>
+      <a href="https://yellowsy.github.io/2022/09/15/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/" title="进程的同步互斥" target="_blank" rel="external">https://yellowsy.github.io/2022/09/15/进程的同步互斥/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -549,6 +564,10 @@
   <div class="bar-inner">
   
   <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/09/18/Typora%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E5%88%B0%E5%8D%9A%E5%AE%A2/" title="Typora图片上传到博客"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
     
     
     <li class="next">

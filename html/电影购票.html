@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="jquery-1.11.2.js"></script>
+		<script>
+			$(function(){
+				count=0;num=0;price=38;
+				var myseat=new Array()
+				$("#box ul li").click(function(){
+					index=$(this).index()
+					//记录座位信息
+					td=Math.floor(index/8)+1
+					tr=index%8+1
+					//获取已经显示座位
+					var has=$(this).hasClass("on")
+					if(has){ //点击取消座位预定
+						clear()//清除座位
+						$("#num").html(num)
+						$("#price").html(num*price)
+						for(var n=0;n<5;n++){
+							if(index==myseat[n]){
+								$("span").eq(n).html("")//删除座位信息
+							}
+						}
+					}
+					else{//点击预定座位
+					    myseat[count]=index//将点击的座位信息存入数组
+						run()//勾选座位
+						pos()//输出座位信息
+					}
+					if(count==6){//提示最多只能买五张票
+						alert("最多只能买五张票")
+						clear()
+						$("#num").html(num)
+						$("#price").text(num*price)
+					}
+				})
+				//当点击确认购票时，提示需付金额
+				$("#btn").click(function(){
+					alert('此次交易需支付'+num*price+'元')
+				})
+				//勾选座位函数
+				function run(){
+					$("#box ul li").eq(index).addClass("on")
+					num++;
+					count++;
+				}
+				//清除座位函数
+				function clear(){
+					$("#box ul li").eq(index).removeClass("on")
+					count--;
+					num--;
+				}
+				//输出座位信息函数
+				function pos(){
+					$("span").eq(count-1).html(td+"行"+tr+"列")
+					// $("#pos").append(td+"行"+tr+"列")
+					$("#num").html(num)
+					$("#price").html(num*price)
+				}
+			})
+		</script>
+		<style>
+			*{
+				margin:0px;
+				padding:0px;
+			}
+			.head{
+				width:935px;
+				height:650px;
+				margin:0 auto;
+			}
+			#box{
+				width:465px;
+				height:645px;
+				float:left;
+			}
+			.content{
+				width:465px;
+				height:645px;
+				float:left;
+				background-color:bisque;
+			}
+			.content img{
+				margin: 10px;
+			}
+			#box ul{
+				text-align: center;
+				line-height: 30px;
+				margin-top: 30px;
+				margin-left: 40px;
+			}
+			#box ul li{
+				list-style: none;
+				width:30px;
+				height:30px;
+				float:left;
+				margin-right: 20px;
+				margin-bottom: 20px;
+				overflow: hidden;
+			}
+			#box ul li img{
+				margin-top: -28px;
+			}
+			#box ul.img li.on img{
+				margin-top:0px;
+			}
+			#box ul.img li.up img{
+				margin-top:-58px;
+			}
+			#box ul li.abc{
+				margin-left: 50px;
+			}
+			#box ul li.efg{
+				margin-left: 100px;
+			}
+			#bottom{
+				width:465px;
+				height:50px;
+				margin-top:540px;
+			}
+			#bottom ul li{
+				list-style: none;
+				width:65px;
+				height:30px;
+				float:left;
+				margin-right: -10px;
+				overflow: hidden;
+			}
+			#bottom ul li.ing img{
+				margin-top: 0px;
+			}
+			#bottom ul li.ed img{
+				margin-top: -58px;
+			}
+			#mag{
+				margin-top:-250px;
+				margin-left: 200px;
+				position: absolute;
+			}
+			p{
+				margin-left: 40px;
+			}
+			.yuan{
+				margin-left: 40px;
+			}
+			.ice,.alert,#num{
+				color:red;
+			}
+			.seat{
+				background-color: beige;
+				color: red;
+			}
+			#btn{
+				background-color:#5cb85c;
+				border-radius: 5px;
+				width:120px;
+				height:30px;
+				margin-top: 30px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="head">
+			<div id="box">
+				<center><font size="20px">屏幕</font>
+				<hr width="80%" color="#808080" size="4px">
+				</center>
+			<ul class="img">
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li class="up"><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li class="up"><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li class="up"><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li class="up"><img src="img/bg.png"></li>
+				<li class="up"><img src="img/bg.png"></li>
+				<li class="up"><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li class="abc"><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li class="efg"><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+				<li><img src="img/bg.png"></li>
+			</ul>
+			<div id="bottom">
+				<ul>
+					<li class="ing"><img src="img/bg.png"></li>
+					<li class="ob">已选座位</li>
+					<li class="will"><img src="img/bg.png"></li>
+					<li class="ob">可选座位</li>
+					<li class="ed"><img src="img/bg.png"></li>
+					<li class="ob">售出座位</li>
+				</ul>
+			</div>
+		    </div>
+		     <div class="content">
+			<img src="img/film1.png" width="180px" height="240px">
+			<div id="mag">
+			中文名：<b>囧妈</b><br><br>英文名：Lost in Russia <br><br>
+			剧情：喜剧<br><br>版本：中文2D<br><br>
+			中国大陆/126分钟<br><br>
+			2020.02
+			</div>
+			<p>
+				影院：<b>万达影院</b><br><br>
+				影厅：<b>8号影厅</b><br><br>
+				场次：<b>2020.05.18(周一)20:00</b><br><br>
+				座位：<span class="seat"></span>  <span class="seat"></span>
+						<span class="seat"></span>  <span class="seat"></span>  
+						<span class="seat"></span>
+				<br><br>
+				已选择<span id="num">0</span>个座位,<span class="alert">再次单击座位可取消,您最多能选五张票！</span><br><br>
+				<div class="yuan">
+				<center><hr width="90%" color="#eaeaea" size="2px"></center>
+				单价:￥38<br>
+				总价:<b class="ice">￥<span id="price">0</span></b>
+				<center><hr width="90%" color="#eaeaea" size="2px"></center></div>
+				<center><button id="btn">确定信息，下单</button></center>
+			</p>
+		    </div>
+		</div>
+	</body>
+</html>

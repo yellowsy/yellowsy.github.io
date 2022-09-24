@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+   *{
+    margin:0px;
+    padding:0px;
+   }
+   body{
+    background-color:#55557f
+   }
+   span{
+	   color:white;
+	   font-size: 36px;
+   }
+   #box{
+    width:490px;
+    height:490px;
+    border-radius:5px;
+    box-shadow:0px 0px 10px #fff;
+    margin:80px auto;
+    padding:10px
+   }
+   #result{
+    width:450px;
+    height:50px;
+    border-radius:5px;
+    border:1px solid yellow;
+    margin:10px auto;
+    background-color: #fff7b2;
+    text-align:right;
+    line-height:50px;
+    padding:5px;
+    font-size: 28px;
+   }
+   #box ul{
+       list-style:none;
+       width:490px;
+       height:310px;
+    margin:15px 14px;
+   }
+   #box ul li{
+    width:70px;
+    height:60px;
+    color:#fff;
+    border-radius:5px;
+    box-shadow:0px 0px 10px #fff;
+    float:left;
+    margin:12px;
+    text-align: center;
+    line-height: 60px;
+    font-size: 28px;
+    cursor:pointer;
+   }
+   .tool{
+    background-color: pink;
+   }
+   .equal{
+    background-color: orange;
+   }
+  </style>
+  <script>
+   window.onload=function(){
+    let display=document.getElementById("result")
+    let myDiv=document.getElementsByTagName("li")
+    for(let i=0;i<myDiv.length;i++){
+     myDiv[i].onclick=function(){
+      //display.innerHTML=this.innerHTML（单击数字后取出让它给显示框）
+      switch(this.innerHTML){
+       case "C":
+            display.innerHTML="0"
+            break;
+       case "0":
+       case "1":
+       case "2":
+       case "3":
+       case "4":
+       case "5":
+       case "6":
+       case "7":
+       case "8":
+       case "9":
+       case "00":
+       case "+":
+       case "-":
+       case "*":
+       case "/":
+       case "%":
+            var str=display.innerHTML
+         if(str=="0")str=""
+         display.innerHTML=str+this.innerHTML
+         break;
+       case "=":
+           display.innerHTML=eval(display.innerHTML)//计算显示框内式子
+		   break; 
+	   case "←":
+	       sth=new String(display.innerHTML)
+		   s=sth.substring(0,sth.length-1)
+		   display.innerHTML=s
+		   break; //删除 用弹出函数删除字符串的最后一个字符
+      }
+     }
+    }
+   }
+  </script>
+ </head>
+ <body>
+  <div id="box">
+	  <center><span style="color: black;">计算器</span></center>
+   <div id="result">0</div>
+   <ul>
+    <li>7</li>
+    <li>8</li>
+    <li>9</li>
+    <li class="tool">←</li>
+    <li class="tool">C</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+    <li class="tool">*</li>
+    <li class="tool">/</li>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li class="tool">+</li>
+    <li class="tool">-</li>
+    <li>0</li>
+    <li>00</li>
+    <li>.</li>
+    <li class="tool">%</li>
+    <li class="tool equal">=</li>
+   </ul>
+  </div>
+ </body>
+</html>

@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://yellowsy.github.io/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/1.jpg">
 <meta property="article:published_time" content="2022-09-22T07:31:50.000Z">
-<meta property="article:modified_time" content="2022-11-17T07:35:06.025Z">
+<meta property="article:modified_time" content="2022-11-24T03:14:13.785Z">
 <meta property="article:author" content="星星失眠啦">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -53,7 +53,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2022-11-17 15:35:06'
+  postUpdate: '2022-11-24 11:14:13'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -142,7 +142,7 @@
       }
     }
     detectApple()
-    })(window)</script><link rel=" stylesheet"" href="/css/Lete.css"><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/1.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">星星失眠啦</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">idea使用内嵌的Tomcat获取前端用户信息</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-09-22T07:31:50.000Z" title="发表于 2022-09-22 15:31:50">2022-09-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-11-17T07:35:06.025Z" title="更新于 2022-11-17 15:35:06">2022-11-17</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="idea使用内嵌的Tomcat获取前端用户信息"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="前后台通讯-前台发送数据到后台"><a class="markdownIt-Anchor" href="#前后台通讯-前台发送数据到后台">#</a> 前后台通讯 - 前台发送数据到后台</h2>
+    })(window)</script><link rel="stylesheet" href="/Lete.css"><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/1.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">星星失眠啦</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">idea使用内嵌的Tomcat获取前端用户信息</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-09-22T07:31:50.000Z" title="发表于 2022-09-22 15:31:50">2022-09-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-11-24T03:14:13.785Z" title="更新于 2022-11-24 11:14:13">2022-11-24</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="idea使用内嵌的Tomcat获取前端用户信息"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="前后台通讯-前台发送数据到后台"><a class="markdownIt-Anchor" href="#前后台通讯-前台发送数据到后台">#</a> 前后台通讯 - 前台发送数据到后台</h2>
 <ul>
 <li>
 <h5 id="工具idea社区版"><a class="markdownIt-Anchor" href="#工具idea社区版">#</a> 工具：idea 社区版</h5>
@@ -176,15 +176,15 @@
 <ul>
 <li>
 <p>打开 Idea，点击 File，然后点击 Settings，进入设置，或者直接按 Ctrl+Alt+S 进入设置</p>
-<img src="/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/20210316150833977.png" alt="在这里插入图片描述" style="zoom:67%;">  
+<img src="https://img1.imgtp.com/2022/11/24/VJ6n1IS2.png" style="zoom:67%;"> 
 </li>
 <li>
 <p>先在左上角的搜索框输入 maven，找到 maven 后单击，然后在右边的 maven home path 的右边选择你的 maven 安装路径，选择到根目录就好了，然后点击确定，具体步骤看下图：</p>
-<img src="/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/20210316152646940.png" alt="在这里插入图片描述" style="zoom: 50%;"> 
+<img src="https://img1.imgtp.com/2022/11/24/aFUD6Avx.png" style="zoom: 50%;"> 
 </li>
 <li>
 <p>Local repository 是 maven 的 本地仓库，默认路径是 C:\Users\Administrator.m2\repository，可以使用默认路径也可以在 settings.xml 中配置本地 maven 仓库，看自己需要，一般在 settings.xml 中配置好了这里会自动检测你在 settings.xml 中配置的仓库路径 ，具体步骤如下图：</p>
-<img src="/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/20210316153840389.png" alt="在这里插入图片描述" style="zoom: 50%;"> 
+<img src="https://img1.imgtp.com/2022/11/24/7VQIZiw9.png" style="zoom: 50%;"> 
 </li>
 </ul>
 <h4 id="2在idea中创建maven项目"><a class="markdownIt-Anchor" href="#2在idea中创建maven项目">#</a> 2. 在 Idea 中创建 maven 项目</h4>
@@ -194,28 +194,26 @@
 </li>
 <li>
 <p>建立 maven 工程，具体看图，别选错 webapp 了</p>
-<img src="/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/20210316160813541.png" alt="在这里插入图片描述" style="zoom: 50%;">    
+<img src="https://img1.imgtp.com/2022/11/24/LMWtQ14t.png" style="zoom:50%;">    
 </li>
 <li>
 <p>接下来输入各类名称，填完后直接 next 下一步</p>
 </li>
 <li>
 <p>配置 maven 信息，具体操作如下图：</p>
-<img src="/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/20210316165927988.png" alt="在这里插入图片描述" style="zoom: 50%;"> 
+<img src="https://img1.imgtp.com/2022/11/24/YBKnKIpW.png" style="zoom:50%;"> 
 </li>
 <li>
 <p>添加配置 DarchetypeCatalog=internal，添加原因：每次创建 maven 项目时， IDEA 要使用插件进行创建，这些插件当你创建新的项目时，它每次都会去中央仓库下载，这样使得创建比较慢。所以在创建 maven 项目时，应该让它找本地仓库中的插件进行项目的创建。</p>
 </li>
 </ul>
 <p>​       <code>DarchetypeCatalog=internal</code></p>
-<p>​      <img src="/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/20210316170658537.png" alt="在这里插入图片描述" style="zoom: 50%;"></p>
+<p>​      <img src="https://img1.imgtp.com/2022/11/24/ByUL6aEy.png" style="zoom:50%;"></p>
 <h4 id="3完善maven-web项目模板"><a class="markdownIt-Anchor" href="#3完善maven-web项目模板">#</a> 3. 完善 maven-web 项目模板</h4>
 <ul>
 <li>
 <p>第一次加载 maven 项目比较慢，等待右下角的进度条加载结束，下面是刚建好的 maven-web 项目模板</p>
-</li>
-<li>
-<img src="/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/20210316171955906.png" alt="在这里插入图片描述" style="zoom:67%;">  
+<img src="https://img1.imgtp.com/2022/11/24/iz6pdUI9.png" style="zoom: 67%;">  
 </li>
 <li>
 <p>上面的项目不完整，不能满足我们的开发需要，所以需要我们手动建设一些文件夹，需要兴建的文件夹如下，以下是 maven 项目的标准目录结构：<br>
@@ -227,7 +225,7 @@ src/test/resources<br>
 在 src 目录上右击 New-&gt;Directory 新建 test 文件夹<br>
 在 test 目录上右击 New-&gt;Directory 新建 java 和 resources 文件夹<br>
 下面只演示一个，其余类似</p>
-<img src="/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/20210316172809520.png" alt="在这里插入图片描述" style="zoom: 50%;">  
+<img src="https://img1.imgtp.com/2022/11/24/PT072gxN.png" style="zoom: 50%;">  
 </li>
 <li>
 <p>接下来就是把新建立的文件夹进行关联了，看清楚关联对象，关联错了就得重新关联，这一定不能出错，关联方法如下图。<br>
@@ -235,11 +233,11 @@ src/main/java 关联为 Sources Root<br>
 src/main/resources 关联为 Resources Root<br>
 src/test/java 关联为 Test Sources Root<br>
 src/test/resources 关联为 Test Resources Root</p>
-<img src="/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/20210316180011625.png" alt="在这里插入图片描述" style="zoom: 50%;">  
+<img src="https://img1.imgtp.com/2022/11/24/OiW1gPj5.png" style="zoom:50%;">  
 </li>
 <li>
 <p>以下是关联之后完整的 maven-web 项目的目录，配置完成</p>
-<img src="/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/20210316180629449.png" alt="在这里插入图片描述" style="zoom:67%;">  
+<img src="https://img1.imgtp.com/2022/11/24/kiQfsXui.png" style="zoom: 67%;">  
 </li>
 </ul>
 <h3 id="a-idindex2二-编写前端页面html用户提交信息a"><a class="markdownIt-Anchor" href="#a-idindex2二-编写前端页面html用户提交信息a">#</a> <a id="index2">二。编写前端页面 html，用户提交信息</a></h3>
@@ -255,7 +253,7 @@ src/test/resources 关联为 Test Resources Root</p>
 <p>效果如图：（用户输入信息后点击 Login 登录）</p>
 </li>
 </ul>
-<img src="/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/image-20220922214338623.png" alt="image-20220922214338623" style="zoom:60%;">   
+<img src="https://img1.imgtp.com/2022/11/24/TEajWvJF.png" style="zoom: 67%;">   
 <h3 id="a-idindex3三-创建serlvet类并在main函数中嵌入tomcat代码a"><a class="markdownIt-Anchor" href="#a-idindex3三-创建serlvet类并在main函数中嵌入tomcat代码a">#</a> <a id="index3">三。创建 Serlvet 类，并在 main 函数中嵌入 Tomcat 代码</a></h3>
 <h4 id="1-在pomxml中导入servlet依赖注意代码放在dependencysdependencys之间"><a class="markdownIt-Anchor" href="#1-在pomxml中导入servlet依赖注意代码放在dependencysdependencys之间">#</a> 1. 在 pom.xml 中导入 Servlet 依赖，注意代码放在 &lt;dependencys&gt;&lt;/dependencys &gt; 之间</h4>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--加入servlet依赖（servlet的jar）--&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;javax.servlet&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;javax.servlet-api&lt;/artifactId&gt;</span><br><span class="line">      &lt;version&gt;<span class="number">4.0</span><span class="number">.1</span>&lt;/version&gt;</span><br><span class="line">      &lt;scope&gt;provided&lt;/scope&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">&lt;!--jsp的依赖（jsp相关的jar加进来）--&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">	  &lt;groupId&gt;javax.servlet.jsp&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;javax.servlet.jsp-api&lt;/artifactId&gt;</span><br><span class="line">      &lt;version&gt;<span class="number">2.2</span><span class="number">.1</span>&lt;/version&gt;</span><br><span class="line">      &lt;scope&gt;provided&lt;/scope&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
@@ -274,11 +272,11 @@ src/test/resources 关联为 Test Resources Root</p>
 <ul>
 <li>
 <p>运行 main 函数，在地址栏输入 locathost:8080/userinfo.html（自己编写的 html 文件）访问前端页面，输入信息，点击 Login 登录。</p>
-<p><img src="/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/image-20220922221144838.png" alt="image-20220922221144838"></p>
+<img src="https://img1.imgtp.com/2022/11/24/pQxzk1EX.png" style="zoom:67%;"> 
 </li>
 <li>
 <p>可以看到控制台获取前端数据并输出：</p>
-<img src="/2022/09/22/idea%E4%BD%BF%E7%94%A8%E5%86%85%E5%B5%8C%E7%9A%84Tomcat%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/image-20220922221313491.png" alt="image-20220922221313491" style="zoom: 40%;"> 
+<img src="https://img1.imgtp.com/2022/11/24/y9Qp7yWe.png" style="zoom:67%;"> 
 <p>至此我们成功获得前端数据并输出</p>
 </li>
 </ul>
